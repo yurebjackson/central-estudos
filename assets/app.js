@@ -1,321 +1,568 @@
+(() => {
+  "use strict";
 
-const STORAGE = {
-  plan: "unifsa_study_plan_v2",
-  notes: "unifsa_study_notes_v2",
-  bestQuiz: "unifsa_best_quiz_v2"
-};
+  const config = window.APP_CONFIG;
+  const content = window.STUDY_CONTENT;
+  const qs = (selector, root = document) => root.querySelector(selector);
+  const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const plan = [
-  "Dia 1 — Cidadania, democracia e educação + 10 flashcards",
-  "Dia 2 — Direitos humanos, inclusão, diversidade e justiça social",
-  "Dia 3 — Desigualdades étnico-raciais + estudo de caso",
-  "Dia 4 — Racismo, preconceito e discriminação + revisão dos dias 1–3",
-  "Dia 5 — Introdução à ética: ética × moral + dilemas éticos",
-  "Dia 6 — Ética profissional, social e política",
-  "Dia 7 — Revisão geral da 1ª semana + simulado",
-  "Dia 8 — Comunicação e negociação",
-  "Dia 9 — Mediação de conflitos no contexto educacional",
-  "Dia 10 — Ética no mundo digital e cidadania digital",
-  "Dia 11 — Sustentabilidade e responsabilidade socioambiental",
-  "Dia 12 — Agenda 2030 + papel da escola na formação cidadã",
-  "Dia 13 — Simulado completo + revisar todos os erros",
-  "Dia 14 — Revisão leve: conceitos-chave, flashcards e dúvidas"
-];
-
-const summaries = [
-  {
-    title:"1. Cidadania, democracia, educação e direitos humanos",
-    key:"Cidadania envolve participação na vida social e política, exercício de direitos e cumprimento de deveres.",
-    bullets:[
-      "Democracia pressupõe participação, pluralidade e respeito às regras e direitos.",
-      "Direitos humanos protegem a dignidade humana e orientam a defesa da igualdade, liberdade e não discriminação.",
-      "A escola contribui para a formação cidadã ao promover participação, respeito, pensamento crítico, inclusão e justiça social."
-    ]
-  },
-  {
-    title:"2. Inclusão, diversidade, desigualdades étnico-raciais e justiça social",
-    key:"Igualdade e equidade não são a mesma coisa: equidade considera desigualdades e necessidades para promover condições mais justas.",
-    bullets:[
-      "Reconhecer desigualdades étnico-raciais ajuda a compreender obstáculos históricos e sociais.",
-      "Inclusão exige remover barreiras de acesso, participação e aprendizagem.",
-      "Justiça social envolve combater exclusões e ampliar oportunidades e direitos."
-    ]
-  },
-  {
-    title:"3. Racismo, preconceito e discriminação",
-    key:"Preconceito é julgamento prévio; discriminação é tratamento desigual; racismo produz ou sustenta hierarquias e desigualdades raciais.",
-    bullets:[
-      "A escola deve prevenir e enfrentar práticas discriminatórias.",
-      "Práticas pedagógicas antirracistas valorizam diversidade, representação, respeito e análise crítica.",
-      "O conteúdo do plano enfatiza o combate ao racismo e às diferentes formas de discriminação."
-    ]
-  },
-  {
-    title:"4. Introdução à ética: ética e moral",
-    key:"Ética é reflexão crítica sobre valores e princípios; moral é o conjunto de normas, valores e costumes vividos por um grupo ou sociedade.",
-    bullets:[
-      "Dilemas éticos surgem quando valores ou deveres entram em conflito.",
-      "A análise ética considera direitos, deveres, consequências, justiça e responsabilidade.",
-      "Na educação, a ética orienta relações profissionais e responsabilidade com estudantes e comunidade."
-    ]
-  },
-  {
-    title:"5. Ética profissional, social e política",
-    key:"A ética profissional envolve responsabilidade, respeito, integridade, justiça e avaliação dos impactos das decisões.",
-    bullets:[
-      "Ética profissional não é somente seguir regras.",
-      "Ética social observa impactos das escolhas sobre convivência e bem comum.",
-      "Ética política envolve responsabilidade pública, participação e respeito aos direitos."
-    ]
-  },
-  {
-    title:"6. Comunicação, negociação e mediação de conflitos",
-    key:"Negociação busca solução entre interesses diferentes; mediação facilita o diálogo para que as próprias partes construam uma solução.",
-    bullets:[
-      "Escuta ativa, clareza e respeito reduzem a escalada do conflito.",
-      "É útil separar pessoas do problema e identificar interesses reais.",
-      "Na escola, a mediação pode transformar conflitos em oportunidade de diálogo e aprendizagem."
-    ]
-  },
-  {
-    title:"7. Ética no mundo digital e cidadania digital",
-    key:"Cidadania digital é o uso responsável, crítico, seguro e respeitoso das tecnologias.",
-    bullets:[
-      "Temas relevantes: privacidade, exposição de dados, cyberbullying, desinformação e responsabilidade nas publicações.",
-      "Antes de compartilhar conteúdo, é importante verificar fonte, contexto e possíveis danos.",
-      "Responsabilidades éticas continuam válidas no ambiente digital."
-    ]
-  },
-  {
-    title:"8. Sustentabilidade, responsabilidade socioambiental e Agenda 2030",
-    key:"Sustentabilidade integra dimensões social, econômica e ambiental.",
-    bullets:[
-      "A Agenda 2030 organiza objetivos de desenvolvimento sustentável em temas sociais, econômicos e ambientais.",
-      "Na educação, sustentabilidade pode aparecer em projetos, hábitos institucionais e formação para responsabilidade coletiva.",
-      "O plano destaca a escola na construção de práticas éticas, inclusivas e sustentáveis."
-    ]
+  if (!window.supabase || !config?.SUPABASE_URL || !config?.SUPABASE_PUBLISHABLE_KEY) {
+    document.body.innerHTML = '<main style="padding:40px;font-family:Arial"><h1>Configuração incompleta</h1><p>Verifique a conexão com o Supabase e tente novamente.</p></main>';
+    return;
   }
-];
 
-const cards = [
-  ["O que é cidadania?","Participação na vida social e política, com exercício de direitos e cumprimento de deveres."],
-  ["Qual a relação entre democracia e cidadania?","A democracia depende da participação cidadã, do pluralismo e do respeito aos direitos."],
-  ["O que são direitos humanos?","Direitos ligados à dignidade humana, voltados à proteção da liberdade, igualdade e não discriminação."],
-  ["Igualdade e equidade são iguais?","Não. Igualdade busca tratamento igual; equidade considera diferenças e desigualdades para produzir condições mais justas."],
-  ["Preconceito, discriminação e racismo: qual a diferença?","Preconceito é julgamento prévio; discriminação é tratamento desigual; racismo sustenta desigualdades raciais."],
-  ["O que é ética?","Reflexão crítica sobre valores, princípios e critérios que orientam decisões e condutas."],
-  ["O que é moral?","Conjunto de normas, valores e costumes compartilhados por grupos ou sociedades."],
-  ["O que é um dilema ético?","Situação em que valores, deveres ou interesses entram em conflito e exigem decisão justificada."],
-  ["O que caracteriza ética profissional?","Responsabilidade, respeito, integridade, justiça e avaliação dos impactos das decisões."],
-  ["O que é negociação?","Processo de busca de acordo ou solução possível entre interesses diferentes."],
-  ["O que é mediação?","Facilitação do diálogo entre partes em conflito para que construam uma solução."],
-  ["O que é escuta ativa?","Ouvir com atenção para compreender conteúdo, interesses e sentimentos, confirmando o entendimento."],
-  ["O que é cidadania digital?","Uso responsável, crítico, seguro e respeitoso das tecnologias digitais."],
-  ["Quais riscos éticos existem no mundo digital?","Exposição de dados, cyberbullying, desinformação e compartilhamento irresponsável."],
-  ["O que é sustentabilidade?","Integração das dimensões social, econômica e ambiental visando necessidades presentes e futuras."],
-  ["O que é Agenda 2030?","Agenda internacional estruturada em Objetivos de Desenvolvimento Sustentável."],
-  ["Qual o papel da escola na formação cidadã?","Promover participação, pensamento crítico, inclusão, respeito, justiça social e responsabilidade."],
-  ["Qual estratégia ajuda a resolver conflitos?","Separar pessoas do problema, ouvir interesses, comunicar com respeito e buscar solução colaborativa."]
-];
-
-const quiz = [
-  {q:"1. A cidadania está mais relacionada a:",o:["Apenas votar em eleições","Participar da vida social e política, exercendo direitos e deveres","Somente conhecer as leis","Evitar conflitos sociais"],a:1},
-  {q:"2. A equidade diferencia-se da igualdade porque:",o:["Elimina direitos universais","Considera desigualdades e necessidades para promover condições mais justas","Significa tratar todos sempre de forma idêntica","Aplica-se apenas ao trabalho"],a:1},
-  {q:"3. Qual alternativa representa melhor um direito humano?",o:["Um privilégio de determinada profissão","Uma proteção ligada à dignidade de todas as pessoas","Uma regra opcional da escola","Uma vantagem concedida por amizade"],a:1},
-  {q:"4. Preconceito é:",o:["A prática concreta de tratamento desigual","Um julgamento ou atitude prévia sobre pessoas ou grupos","Uma técnica de mediação","Uma política de inclusão"],a:1},
-  {q:"5. Discriminação é:",o:["Tratamento desigual ou exclusão baseada em determinada característica","Apenas uma opinião privada sem efeito","Sinônimo de negociação","Forma de sustentabilidade"],a:0},
-  {q:"6. Ética pode ser entendida como:",o:["Reflexão crítica sobre valores e condutas","Qualquer costume social, sem reflexão","Apenas cumprimento de ordens","Somente leis escritas"],a:0},
-  {q:"7. Moral refere-se principalmente a:",o:["Normas, valores e costumes praticados em um grupo ou sociedade","Um método de negociação","Uma lei ambiental","Um recurso tecnológico"],a:0},
-  {q:"8. Em um dilema ético:",o:["Não existe conflito entre valores","A decisão é sempre óbvia","Valores ou deveres podem entrar em conflito","A única solução é evitar decidir"],a:2},
-  {q:"9. Uma conduta profissional ética envolve:",o:["Favorecer pessoas conhecidas","Ignorar impactos das decisões","Responsabilidade, respeito e justiça","Agir apenas por interesse pessoal"],a:2},
-  {q:"10. Negociação é melhor definida como:",o:["Imposição de uma decisão","Busca de solução entre interesses diferentes","Aplicação de punição automática","Abandono do diálogo"],a:1},
-  {q:"11. Na mediação de conflitos, o mediador deve:",o:["Decidir sozinho quem tem razão","Facilitar o diálogo entre as partes","Aumentar a disputa","Representar somente uma parte"],a:1},
-  {q:"12. Escuta ativa significa:",o:["Esperar sua vez de falar","Ouvir para compreender e confirmar o entendimento","Ignorar sentimentos","Interromper para acelerar a conversa"],a:1},
-  {q:"13. Cidadania digital envolve:",o:["Uso responsável, crítico e seguro das tecnologias","Compartilhar tudo rapidamente","Evitar qualquer tecnologia","Usar contas anônimas"],a:0},
-  {q:"14. Antes de compartilhar informação online, uma atitude ética é:",o:["Verificar fonte e contexto","Compartilhar primeiro e conferir depois","Confiar apenas no título","Ignorar possíveis danos"],a:0},
-  {q:"15. Sustentabilidade integra:",o:["Somente meio ambiente","Somente economia","Dimensões social, econômica e ambiental","Apenas tecnologia"],a:2},
-  {q:"16. A Agenda 2030 está relacionada a:",o:["Objetivos de Desenvolvimento Sustentável","Regras de trânsito","Normas de uma escola específica","Código profissional único"],a:0},
-  {q:"17. Uma prática escolar inclusiva busca:",o:["Remover barreiras de participação e aprendizagem","Separar alunos por diferenças","Evitar diversidade","Aplicar exatamente o mesmo recurso em qualquer situação"],a:0},
-  {q:"18. Uma postura antirracista na escola envolve:",o:["Ignorar o tema para evitar conflitos","Reconhecer desigualdades e enfrentar práticas discriminatórias","Tratar racismo como opinião pessoal","Abordar o assunto apenas quando houver denúncia"],a:1},
-  {q:"19. Ao mediar um conflito escolar, é adequado:",o:["Atacar a pessoa","Separar pessoas do problema e identificar interesses","Aumentar a pressão emocional","Evitar ouvir as partes"],a:1},
-  {q:"20. O papel da escola na formação cidadã inclui:",o:["Somente transmitir conteúdo","Promover participação, criticidade, inclusão e responsabilidade","Evitar temas sociais","Substituir totalmente a família e a comunidade"],a:1}
-];
-
-const videos = [
-  ["Cidadania, democracia e direitos humanos","https://www.youtube.com/results?search_query=cidadania+democracia+direitos+humanos+educa%C3%A7%C3%A3o"],
-  ["Ética e moral — diferenças e exemplos","https://www.youtube.com/results?search_query=%C3%A9tica+e+moral+diferen%C3%A7a+aula"],
-  ["Relações étnico-raciais na educação","https://www.youtube.com/results?search_query=rela%C3%A7%C3%B5es+%C3%A9tnico+raciais+educa%C3%A7%C3%A3o+aula"],
-  ["Racismo, preconceito e discriminação","https://www.youtube.com/results?search_query=racismo+preconceito+discrimina%C3%A7%C3%A3o+educa%C3%A7%C3%A3o"],
-  ["Negociação e mediação de conflitos na escola","https://www.youtube.com/results?search_query=media%C3%A7%C3%A3o+de+conflitos+na+escola+negocia%C3%A7%C3%A3o"],
-  ["Ética e cidadania digital","https://www.youtube.com/results?search_query=%C3%A9tica+cidadania+digital+aula"],
-  ["Agenda 2030 e ODS","https://www.youtube.com/results?search_query=Agenda+2030+ODS+ONU+portugu%C3%AAs"],
-  ["Sustentabilidade e educação","https://www.youtube.com/results?search_query=sustentabilidade+educa%C3%A7%C3%A3o+aula"]
-];
-
-function scrollToSection(id){
-  document.getElementById(id)?.scrollIntoView({behavior:"smooth", block:"start"});
-}
-
-document.querySelectorAll("[data-scroll]").forEach(btn=>{
-  btn.addEventListener("click",()=>scrollToSection(btn.dataset.scroll));
-});
-
-function renderPlan(){
-  const list = document.getElementById("planList");
-  const state = JSON.parse(localStorage.getItem(STORAGE.plan) || "[]");
-  list.innerHTML = "";
-  plan.forEach((item,i)=>{
-    const [title,...rest] = item.split(" — ");
-    const checked = !!state[i];
-    const row = document.createElement("article");
-    row.className = "card day" + (checked ? " done" : "");
-    row.innerHTML = `
-      <input type="checkbox" ${checked ? "checked" : ""} aria-label="Marcar ${title} como concluído">
-      <div class="day-copy">
-        <div class="day-title">${title}</div>
-        <div>${rest.join(" — ")}</div>
-      </div>`;
-    row.querySelector("input").addEventListener("change",e=>{
-      const current = JSON.parse(localStorage.getItem(STORAGE.plan) || "[]");
-      current[i] = e.target.checked;
-      localStorage.setItem(STORAGE.plan, JSON.stringify(current));
-      renderPlan();
-    });
-    list.appendChild(row);
-  });
-  updateDashboard();
-}
-
-function updateDashboard(){
-  const state = JSON.parse(localStorage.getItem(STORAGE.plan) || "[]");
-  const done = plan.filter((_,i)=>state[i]).length;
-  const pct = Math.round((done/plan.length)*100);
-  document.getElementById("progressPct").textContent = pct + "%";
-  document.getElementById("progressBar").style.width = pct + "%";
-  document.getElementById("daysDone").textContent = `${done}/${plan.length}`;
-  const best = localStorage.getItem(STORAGE.bestQuiz);
-  document.getElementById("bestQuiz").textContent = best ? best + "%" : "—";
-}
-
-function renderSummaries(){
-  const host = document.getElementById("summaryList");
-  host.innerHTML = "";
-  summaries.forEach((s,idx)=>{
-    const d = document.createElement("details");
-    d.className = "card summary";
-    if(idx === 0) d.open = true;
-    d.innerHTML = `
-      <summary>${s.title}</summary>
-      <div class="summary-body">
-        <div class="key"><strong>Ideia central:</strong> ${s.key}</div>
-        <ul>${s.bullets.map(x=>`<li>${x}</li>`).join("")}</ul>
-      </div>`;
-    host.appendChild(d);
-  });
-}
-
-let cardIndex = 0;
-let cardAnswer = false;
-
-function renderCard(){
-  const el = document.getElementById("flashCard");
-  el.textContent = cardAnswer ? cards[cardIndex][1] : cards[cardIndex][0];
-  document.getElementById("flashProgress").textContent = `${cardIndex+1}/${cards.length}`;
-}
-
-document.getElementById("flashCard").addEventListener("click",()=>{
-  cardAnswer = !cardAnswer; renderCard();
-});
-document.getElementById("flashNext").addEventListener("click",()=>{
-  cardIndex = (cardIndex+1)%cards.length; cardAnswer = false; renderCard();
-});
-document.getElementById("flashPrev").addEventListener("click",()=>{
-  cardIndex = (cardIndex-1+cards.length)%cards.length; cardAnswer = false; renderCard();
-});
-
-function renderQuiz(){
-  const form = document.getElementById("quizForm");
-  form.innerHTML = "";
-  quiz.forEach((x,i)=>{
-    const div = document.createElement("div");
-    div.className = "quiz-q";
-    div.innerHTML = `<b>${x.q}</b>` + x.o.map((opt,j)=>
-      `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`
-    ).join("");
-    form.appendChild(div);
-  });
-}
-
-document.getElementById("quizGrade").addEventListener("click",()=>{
-  let score = 0, missing = 0, wrong = [];
-  quiz.forEach((x,i)=>{
-    const choice = document.querySelector(`input[name="q${i}"]:checked`);
-    if(!choice){ missing++; return; }
-    if(Number(choice.value) === x.a) score++;
-    else wrong.push(i+1);
+  const db = window.supabase.createClient(config.SUPABASE_URL, config.SUPABASE_PUBLISHABLE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
 
-  const pct = Math.round((score/quiz.length)*100);
-  document.getElementById("quizResult").textContent = `Resultado: ${score}/${quiz.length} — ${pct}%`;
-  document.getElementById("quizFeedback").textContent =
-    `${missing ? `Sem resposta: ${missing}. ` : ""}Questões erradas: ${wrong.length ? wrong.join(", ") : "nenhuma"}.`;
+  const state = {
+    mode: "login",
+    session: null,
+    completedDays: new Set(),
+    results: [],
+    flashIndex: 0,
+    flashFlipped: false,
+    knownCards: new Set(),
+    quizQuestions: [],
+    timerSeconds: 25 * 60,
+    timerRunning: false,
+    timerHandle: null,
+    notesHandle: null
+  };
 
-  const best = Number(localStorage.getItem(STORAGE.bestQuiz) || 0);
-  if(pct > best) localStorage.setItem(STORAGE.bestQuiz, String(pct));
-  updateDashboard();
-});
+  let toastHandle;
 
-document.getElementById("quizReset").addEventListener("click",()=>{
-  document.getElementById("quizForm").reset();
-  document.getElementById("quizResult").textContent = "";
-  document.getElementById("quizFeedback").textContent = "";
-});
+  function showToast(message, type = "") {
+    const toast = qs("#toast");
+    toast.textContent = message;
+    toast.className = `toast show ${type}`.trim();
+    clearTimeout(toastHandle);
+    toastHandle = setTimeout(() => { toast.className = "toast"; }, 3200);
+  }
 
-function renderVideos(){
-  const host = document.getElementById("videoList");
-  host.innerHTML = "";
-  videos.forEach(([name,url])=>{
-    const row = document.createElement("div");
-    row.className = "video-row";
-    row.innerHTML = `<span>${name}</span><a href="${url}" target="_blank" rel="noopener">Abrir no YouTube →</a>`;
-    host.appendChild(row);
-  });
-}
+  function humanError(error) {
+    const message = error?.message || String(error || "Erro desconhecido");
+    const translations = [
+      [/invalid login credentials/i, "E-mail ou senha incorretos."],
+      [/email not confirmed/i, "Confirme seu e-mail antes de entrar."],
+      [/user already registered/i, "Já existe uma conta com este e-mail."],
+      [/password should be at least/i, "A senha precisa ter pelo menos 6 caracteres."],
+      [/unable to validate email/i, "Digite um e-mail válido."],
+      [/failed to fetch|network/i, "Não foi possível conectar. Verifique sua internet."],
+      [/row-level security|permission denied/i, "O banco bloqueou a operação. Confira o SQL e as políticas RLS."],
+      [/rate limit/i, "Muitas tentativas. Aguarde um pouco e tente novamente."]
+    ];
+    const found = translations.find(([pattern]) => pattern.test(message));
+    return found ? found[1] : message;
+  }
 
-const notes = document.getElementById("notes");
-notes.value = localStorage.getItem(STORAGE.notes) || "";
-document.getElementById("saveNotes").addEventListener("click",()=>{
-  localStorage.setItem(STORAGE.notes, notes.value);
-  alert("Anotações salvas neste navegador.");
-});
+  function setSync(status, text) {
+    const dot = qs("#syncDot");
+    dot.className = `sync-dot ${status === "pending" || status === "error" ? status : ""}`.trim();
+    qs("#syncText").textContent = text || (status === "pending" ? "Salvando..." : status === "error" ? "Falha ao sincronizar" : "Sincronizado");
+  }
 
-let remaining = 25*60;
-let timerId = null;
-function drawTimer(){
-  const m = Math.floor(remaining/60);
-  const s = remaining%60;
-  document.getElementById("timer").textContent = `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-}
-document.getElementById("timerStart").addEventListener("click",()=>{
-  if(timerId) return;
-  timerId = setInterval(()=>{
-    if(remaining > 0){ remaining--; drawTimer(); }
-    else{
-      clearInterval(timerId); timerId = null;
-      alert("Bloco concluído. Faça uma pausa curta.");
+  function setAuthMessage(message, success = false) {
+    const el = qs("#authMessage");
+    el.textContent = message;
+    el.className = `form-message${success ? " success" : ""}`;
+  }
+
+  function setAuthMode(mode) {
+    state.mode = mode;
+    const signup = mode === "signup";
+    qs("#nameField").classList.toggle("hidden", !signup);
+    qs("#formTitle").textContent = signup ? "Crie sua conta" : "Entre na sua conta";
+    qs("#formDescription").textContent = signup ? "Seu progresso ficará salvo e disponível em outros dispositivos." : "Continue do ponto em que parou, em qualquer dispositivo.";
+    qs("#authSubmit").textContent = signup ? "Criar conta" : "Entrar";
+    qs("#switchPrompt").textContent = signup ? "Já possui uma conta?" : "Ainda não possui conta?";
+    qs("#switchMode").textContent = signup ? "Entrar" : "Criar conta";
+    qs("#password").autocomplete = signup ? "new-password" : "current-password";
+    qs("#forgotPassword").classList.toggle("hidden", signup);
+    setAuthMessage("");
+  }
+
+  async function handleAuthSubmit(event) {
+    event.preventDefault();
+    const email = qs("#email").value.trim();
+    const password = qs("#password").value;
+    const name = qs("#displayName").value.trim();
+    const button = qs("#authSubmit");
+
+    if (!email || !password || (state.mode === "signup" && !name)) {
+      setAuthMessage("Preencha todos os campos para continuar.");
+      return;
     }
-  },1000);
-});
-document.getElementById("timerPause").addEventListener("click",()=>{
-  clearInterval(timerId); timerId = null;
-});
-document.getElementById("timerReset").addEventListener("click",()=>{
-  clearInterval(timerId); timerId = null; remaining = 25*60; drawTimer();
-});
+    if (password.length < 6) {
+      setAuthMessage("A senha precisa ter pelo menos 6 caracteres.");
+      return;
+    }
 
-renderPlan();
-renderSummaries();
-renderCard();
-renderQuiz();
-renderVideos();
-drawTimer();
+    button.disabled = true;
+    button.textContent = state.mode === "signup" ? "Criando..." : "Entrando...";
+    setAuthMessage("");
+    try {
+      if (state.mode === "signup") {
+        const redirectTo = `${location.origin}${location.pathname}`;
+        const { data, error } = await db.auth.signUp({
+          email,
+          password,
+          options: { data: { display_name: name }, emailRedirectTo: redirectTo }
+        });
+        if (error) throw error;
+        if (!data.session) {
+          setAuthMessage("Conta criada. Abra o e-mail de confirmação e clique no link para ativar.", true);
+        } else {
+          await openApp(data.session);
+        }
+      } else {
+        const { data, error } = await db.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        await openApp(data.session);
+      }
+    } catch (error) {
+      setAuthMessage(humanError(error));
+    } finally {
+      button.disabled = false;
+      button.textContent = state.mode === "signup" ? "Criar conta" : "Entrar";
+    }
+  }
+
+  async function resetPassword() {
+    const email = qs("#email").value.trim();
+    if (!email) {
+      setAuthMessage("Digite seu e-mail primeiro e clique novamente em “Esqueci a senha”.");
+      qs("#email").focus();
+      return;
+    }
+    try {
+      const redirectTo = `${location.origin}${location.pathname}`;
+      const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo });
+      if (error) throw error;
+      setAuthMessage("Enviamos as instruções de recuperação para o seu e-mail.", true);
+    } catch (error) {
+      setAuthMessage(humanError(error));
+    }
+  }
+
+  async function saveNewPassword(event) {
+    event.preventDefault();
+    const password = qs("#newPassword").value;
+    const message = qs("#resetMessage");
+    if (password.length < 6) {
+      message.textContent = "A senha precisa ter pelo menos 6 caracteres.";
+      return;
+    }
+    const button = qs('#resetForm button[type="submit"]');
+    button.disabled = true;
+    button.textContent = "Salvando...";
+    try {
+      const { error } = await db.auth.updateUser({ password });
+      if (error) throw error;
+      qs("#resetDialog").close();
+      qs("#newPassword").value = "";
+      message.textContent = "";
+      showToast("Senha atualizada com sucesso.");
+    } catch (error) {
+      message.textContent = humanError(error);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Salvar nova senha";
+    }
+  }
+
+  function userDisplayName() {
+    const user = state.session?.user;
+    return user?.user_metadata?.display_name?.trim() || user?.email?.split("@")[0] || "Estudante";
+  }
+
+  async function openApp(session) {
+    if (!session) return showAuth();
+    state.session = session;
+    qs("#authView").classList.add("hidden");
+    qs("#appView").classList.remove("hidden");
+    const name = userDisplayName();
+    qs("#pageTitle").textContent = `Bom estudo, ${name.split(" ")[0]}`;
+    qs("#userMenuButton").textContent = name[0].toUpperCase();
+    qs("#accountName").textContent = name;
+    qs("#accountEmail").textContent = session.user.email || "";
+    loadKnownCards();
+    await loadRemoteData();
+  }
+
+  function showAuth() {
+    state.session = null;
+    qs("#appView").classList.add("hidden");
+    qs("#authView").classList.remove("hidden");
+  }
+
+  async function loadRemoteData() {
+    setSync("pending", "Carregando...");
+    try {
+      const [progressResponse, notesResponse, resultsResponse] = await Promise.all([
+        db.from("study_progress").select("day, completed"),
+        db.from("study_notes").select("content").maybeSingle(),
+        db.from("quiz_results").select("id, score, total, percentage, created_at").order("created_at", { ascending: false }).limit(20)
+      ]);
+      const error = progressResponse.error || notesResponse.error || resultsResponse.error;
+      if (error) throw error;
+
+      state.completedDays = new Set((progressResponse.data || []).filter(row => row.completed).map(row => Number(row.day)));
+      state.results = resultsResponse.data || [];
+      qs("#notesArea").value = notesResponse.data?.content || "";
+      renderProgress();
+      renderResults();
+      setSync("ok");
+    } catch (error) {
+      setSync("error");
+      showToast(humanError(error), "error");
+    }
+  }
+
+  function renderPlan() {
+    qs("#studyPlan").innerHTML = content.plan.map(item => `
+      <article class="plan-card ${state.completedDays.has(item.day) ? "done" : ""}" data-day="${item.day}">
+        <span class="day-number">${item.day}</span>
+        <div><h3>${item.title}</h3><p>${item.task}</p></div>
+        <button class="check-button" type="button" aria-label="${state.completedDays.has(item.day) ? "Desmarcar" : "Marcar"} dia ${item.day} como concluído">✓</button>
+      </article>`).join("");
+  }
+
+  async function toggleDay(day) {
+    const wasDone = state.completedDays.has(day);
+    if (wasDone) state.completedDays.delete(day); else state.completedDays.add(day);
+    renderProgress();
+    setSync("pending");
+    try {
+      const { error } = await db.from("study_progress").upsert({
+        user_id: state.session.user.id,
+        day,
+        completed: !wasDone,
+        updated_at: new Date().toISOString()
+      }, { onConflict: "user_id,day" });
+      if (error) throw error;
+      setSync("ok");
+      showToast(wasDone ? `Dia ${day} desmarcado.` : `Dia ${day} concluído. Muito bem!`);
+    } catch (error) {
+      if (wasDone) state.completedDays.add(day); else state.completedDays.delete(day);
+      renderProgress();
+      setSync("error");
+      showToast(humanError(error), "error");
+    }
+  }
+
+  function renderProgress() {
+    const done = state.completedDays.size;
+    const percent = Math.round((done / content.plan.length) * 100);
+    qs("#heroPercent").textContent = `${percent}%`;
+    qs("#progressRing").style.setProperty("--p", percent);
+    qs("#daysStat").textContent = `${done}/${content.plan.length}`;
+    qs("#planPercent").textContent = `${percent}%`;
+    qs("#progressLine").style.width = `${percent}%`;
+    qs("#progressCaption").textContent = `${done} de ${content.plan.length} etapas concluídas`;
+    const next = content.plan.find(item => !state.completedDays.has(item.day));
+    qs("#nextStudyTitle").textContent = next ? `Dia ${next.day} — ${next.title}` : "Plano concluído";
+    qs("#nextStudyDescription").textContent = next ? next.task : "Agora concentre-se em simulados e revisão dos erros.";
+    renderPlan();
+  }
+
+  function renderSummaries() {
+    qs("#summaryList").innerHTML = content.summaries.map((item, index) => `
+      <article class="summary-item ${index === 0 ? "open" : ""}">
+        <button class="summary-toggle" type="button" aria-expanded="${index === 0}">
+          <span class="summary-index">${String(index + 1).padStart(2, "0")}</span>
+          <span><strong>${item.title}</strong><br><small>${item.subtitle}</small></span>
+          <span class="summary-arrow">⌄</span>
+        </button>
+        <div class="summary-body">${item.html}</div>
+      </article>`).join("");
+  }
+
+  function loadKnownCards() {
+    const key = `central-estudos-known-${state.session?.user?.id || "guest"}`;
+    try { state.knownCards = new Set(JSON.parse(localStorage.getItem(key) || "[]")); }
+    catch { state.knownCards = new Set(); }
+    renderFlashcard();
+  }
+
+  function saveKnownCards() {
+    const key = `central-estudos-known-${state.session.user.id}`;
+    localStorage.setItem(key, JSON.stringify([...state.knownCards]));
+  }
+
+  function renderFlashcard() {
+    const card = content.flashcards[state.flashIndex];
+    const cardEl = qs("#flashCard");
+    cardEl.classList.toggle("answer", state.flashFlipped);
+    qs("#flashLabel").textContent = state.flashFlipped ? "Resposta" : "Pergunta";
+    qs("#flashText").textContent = card[state.flashFlipped ? 1 : 0];
+    cardEl.querySelector("small").textContent = state.flashFlipped ? "Toque para voltar à pergunta" : "Toque para ver a resposta";
+    qs("#flashCounter").textContent = `${state.flashIndex + 1}/${content.flashcards.length}`;
+    const known = state.knownCards.has(state.flashIndex);
+    qs("#flashKnow").textContent = known ? "✓ Marcado como aprendido" : "Já sei este";
+    qs("#flashMastery").textContent = `${state.knownCards.size} de ${content.flashcards.length} cartões marcados como aprendidos neste dispositivo.`;
+  }
+
+  function moveFlash(delta) {
+    state.flashIndex = (state.flashIndex + delta + content.flashcards.length) % content.flashcards.length;
+    state.flashFlipped = false;
+    renderFlashcard();
+  }
+
+  function shuffleFlashcards() {
+    let next = state.flashIndex;
+    while (next === state.flashIndex && content.flashcards.length > 1) next = Math.floor(Math.random() * content.flashcards.length);
+    state.flashIndex = next;
+    state.flashFlipped = false;
+    renderFlashcard();
+  }
+
+  function renderVideos() {
+    qs("#videoGrid").innerHTML = content.videos.map((item, index) => `
+      <article class="video-card">
+        <div class="video-cover" style="filter:hue-rotate(${index * 9}deg)"><span>▶</span></div>
+        <div class="video-content"><h3>${item.title}</h3><p>${item.description}</p><a class="video-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}" target="_blank" rel="noopener">Pesquisar videoaulas ↗</a></div>
+      </article>`).join("");
+  }
+
+  function sampleQuestions() {
+    return [...content.quiz].sort(() => Math.random() - .5).slice(0, 20);
+  }
+
+  function startQuiz() {
+    state.quizQuestions = sampleQuestions();
+    qs("#quizStart").classList.add("hidden");
+    qs("#quizResult").classList.add("hidden");
+    qs("#quizForm").classList.remove("hidden");
+    qs("#quizActions").classList.remove("hidden");
+    qs("#quizProgress").textContent = "0/20";
+    qs("#quizForm").innerHTML = state.quizQuestions.map((item, index) => `
+      <article class="question-card" data-question="${index}">
+        <span class="question-number">Questão ${index + 1}</span>
+        <p class="question-text">${item.q}</p>
+        <div class="options">${item.o.map((option, optionIndex) => `<label class="option"><input type="radio" name="q${index}" value="${optionIndex}"><span>${option}</span></label>`).join("")}</div>
+      </article>`).join("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function updateQuizProgress() {
+    const answered = new Set(qsa('#quizForm input:checked').map(input => input.name)).size;
+    qs("#quizProgress").textContent = `${answered}/20`;
+  }
+
+  async function finishQuiz() {
+    const answers = state.quizQuestions.map((_, index) => qs(`input[name="q${index}"]:checked`));
+    const missing = answers.filter(Boolean).length < state.quizQuestions.length;
+    if (missing && !confirm("Você ainda deixou questões sem resposta. Deseja corrigir mesmo assim?")) return;
+
+    let score = 0;
+    state.quizQuestions.forEach((item, index) => {
+      const card = qs(`[data-question="${index}"]`);
+      const selected = answers[index] ? Number(answers[index].value) : -1;
+      const correct = selected === item.a;
+      if (correct) score++;
+      card.classList.add(correct ? "correct" : "wrong");
+      qsa("input", card).forEach(input => { input.disabled = true; });
+      const explanation = document.createElement("p");
+      explanation.className = "explanation";
+      explanation.innerHTML = `<strong>${correct ? "Correto." : `Resposta correta: ${item.o[item.a]}.`}</strong> ${item.e}`;
+      card.appendChild(explanation);
+    });
+
+    const percentage = Math.round((score / state.quizQuestions.length) * 100);
+    qs("#quizActions").classList.add("hidden");
+    const result = qs("#quizResult");
+    result.classList.remove("hidden");
+    result.innerHTML = `<p class="eyebrow">Resultado do simulado</p><strong>${percentage}%</strong><p>Você acertou ${score} de ${state.quizQuestions.length} questões.</p><button id="retryQuiz" class="button light" type="button">Fazer outro simulado</button>`;
+    qs("#retryQuiz").addEventListener("click", startQuiz);
+    result.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    setSync("pending");
+    try {
+      const { data, error } = await db.from("quiz_results").insert({
+        user_id: state.session.user.id,
+        score,
+        total: state.quizQuestions.length,
+        percentage
+      }).select("id, score, total, percentage, created_at").single();
+      if (error) throw error;
+      state.results.unshift(data);
+      renderResults();
+      setSync("ok");
+      showToast("Resultado salvo no seu histórico.");
+    } catch (error) {
+      setSync("error");
+      showToast(humanError(error), "error");
+    }
+  }
+
+  function renderResults() {
+    const best = state.results.length ? Math.max(...state.results.map(item => item.percentage)) : null;
+    qs("#bestStat").textContent = best === null ? "—" : `${best}%`;
+    const list = qs("#recentResults");
+    if (!state.results.length) {
+      list.className = "results-list empty-state";
+      list.textContent = "Você ainda não realizou nenhum simulado.";
+      return;
+    }
+    list.className = "results-list";
+    list.innerHTML = state.results.slice(0, 5).map((item, index) => `
+      <div class="result-row"><span>Simulado ${state.results.length - index}</span><span class="result-score">${item.percentage}% · ${item.score}/${item.total}</span><time class="result-date">${new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(item.created_at))}</time></div>`).join("");
+  }
+
+  function scheduleNotesSave() {
+    qs("#notesStatus").textContent = "Digitando...";
+    clearTimeout(state.notesHandle);
+    state.notesHandle = setTimeout(saveNotes, 900);
+  }
+
+  async function saveNotes() {
+    qs("#notesStatus").textContent = "Salvando...";
+    setSync("pending");
+    try {
+      const { error } = await db.from("study_notes").upsert({
+        user_id: state.session.user.id,
+        content: qs("#notesArea").value,
+        updated_at: new Date().toISOString()
+      }, { onConflict: "user_id" });
+      if (error) throw error;
+      qs("#notesStatus").textContent = "Tudo salvo";
+      setSync("ok");
+    } catch (error) {
+      qs("#notesStatus").textContent = "Não foi possível salvar";
+      setSync("error");
+      showToast(humanError(error), "error");
+    }
+  }
+
+  const pageTitles = {
+    inicio: ["Visão geral", null],
+    plano: ["Sua rotina", "Plano de estudo"],
+    resumos: ["Conteúdo", "Resumos da disciplina"],
+    flashcards: ["Revisão ativa", "Flashcards"],
+    simulado: ["Avaliação", "Simulado"],
+    videos: ["Aprofundamento", "Videoaulas"],
+    anotacoes: ["Seu material", "Anotações"]
+  };
+
+  function navigate(page) {
+    qsa(".page").forEach(el => el.classList.toggle("active", el.id === `page-${page}`));
+    qsa(".nav-item[data-page]").forEach(el => el.classList.toggle("active", el.dataset.page === page));
+    qs("#pageKicker").textContent = pageTitles[page][0];
+    qs("#pageTitle").textContent = pageTitles[page][1] || `Bom estudo, ${userDisplayName().split(" ")[0]}`;
+    qs(".sidebar").classList.remove("open");
+    qs("#accountPopover").classList.add("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function formatTimer() {
+    const min = String(Math.floor(state.timerSeconds / 60)).padStart(2, "0");
+    const sec = String(state.timerSeconds % 60).padStart(2, "0");
+    const value = `${min}:${sec}`;
+    qs("#focusTimer").textContent = value;
+    qs("#miniTimer").textContent = value;
+    qs("#timerStart").textContent = state.timerRunning ? "Pausar" : "Iniciar foco";
+    qs("#miniTimerToggle").textContent = state.timerRunning ? "Pausar" : "Iniciar";
+  }
+
+  function toggleTimer() {
+    state.timerRunning = !state.timerRunning;
+    clearInterval(state.timerHandle);
+    if (state.timerRunning) {
+      state.timerHandle = setInterval(() => {
+        state.timerSeconds--;
+        if (state.timerSeconds <= 0) {
+          clearInterval(state.timerHandle);
+          state.timerRunning = false;
+          state.timerSeconds = 5 * 60;
+          showToast("Foco concluído. Faça uma pausa de 5 minutos!");
+        }
+        formatTimer();
+      }, 1000);
+    }
+    formatTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(state.timerHandle);
+    state.timerRunning = false;
+    state.timerSeconds = 25 * 60;
+    formatTimer();
+  }
+
+  function bindEvents() {
+    qs("#authForm").addEventListener("submit", handleAuthSubmit);
+    qs("#switchMode").addEventListener("click", () => setAuthMode(state.mode === "login" ? "signup" : "login"));
+    qs("#forgotPassword").addEventListener("click", resetPassword);
+    qs("#togglePassword").addEventListener("click", () => {
+      const input = qs("#password");
+      input.type = input.type === "password" ? "text" : "password";
+      qs("#togglePassword").textContent = input.type === "password" ? "Mostrar" : "Ocultar";
+    });
+    qs("#resetForm").addEventListener("submit", saveNewPassword);
+    qs("#cancelReset").addEventListener("click", () => qs("#resetDialog").close());
+    qs("#logoutButton").addEventListener("click", async () => {
+      await db.auth.signOut({ scope: "local" });
+      showAuth();
+    });
+    qs("#mainNav").addEventListener("click", event => {
+      const button = event.target.closest("[data-page]");
+      if (button) navigate(button.dataset.page);
+    });
+    document.addEventListener("click", event => {
+      const go = event.target.closest("[data-go]");
+      if (go) navigate(go.dataset.go);
+    });
+    qs("#menuButton").addEventListener("click", () => qs(".sidebar").classList.toggle("open"));
+    qs("#userMenuButton").addEventListener("click", () => qs("#accountPopover").classList.toggle("hidden"));
+    qs("#studyPlan").addEventListener("click", event => {
+      const button = event.target.closest(".check-button");
+      if (button) toggleDay(Number(button.closest(".plan-card").dataset.day));
+    });
+    qs("#summaryList").addEventListener("click", event => {
+      const button = event.target.closest(".summary-toggle");
+      if (!button) return;
+      const item = button.closest(".summary-item");
+      item.classList.toggle("open");
+      button.setAttribute("aria-expanded", item.classList.contains("open"));
+    });
+    qs("#flashCard").addEventListener("click", () => { state.flashFlipped = !state.flashFlipped; renderFlashcard(); });
+    qs("#flashPrev").addEventListener("click", () => moveFlash(-1));
+    qs("#flashNext").addEventListener("click", () => moveFlash(1));
+    qs("#flashShuffle").addEventListener("click", shuffleFlashcards);
+    qs("#flashKnow").addEventListener("click", () => {
+      if (state.knownCards.has(state.flashIndex)) state.knownCards.delete(state.flashIndex); else state.knownCards.add(state.flashIndex);
+      saveKnownCards();
+      renderFlashcard();
+    });
+    qs("#startQuiz").addEventListener("click", startQuiz);
+    qs("#quizForm").addEventListener("change", updateQuizProgress);
+    qs("#finishQuiz").addEventListener("click", finishQuiz);
+    qs("#notesArea").addEventListener("input", scheduleNotesSave);
+    qs("#timerStart").addEventListener("click", toggleTimer);
+    qs("#miniTimerToggle").addEventListener("click", toggleTimer);
+    qs("#timerReset").addEventListener("click", resetTimer);
+  }
+
+  async function init() {
+    renderPlan();
+    renderSummaries();
+    renderVideos();
+    renderFlashcard();
+    renderProgress();
+    formatTimer();
+    bindEvents();
+
+    const { data, error } = await db.auth.getSession();
+    if (error) setAuthMessage(humanError(error));
+    if (data?.session) await openApp(data.session); else showAuth();
+
+    db.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") showAuth();
+      if (event === "PASSWORD_RECOVERY") qs("#resetDialog").showModal();
+      if (event === "SIGNED_IN" && session && !state.session) openApp(session);
+    });
+  }
+
+  init();
+})();

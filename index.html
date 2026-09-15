@@ -1,190 +1,231 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#3157d5" />
-  <title>Central de Estudos — UNIFSA</title>
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153e75">
+  <meta name="description" content="Central de estudos para Cidadania, Ética, Educação, Negociação e Sustentabilidade.">
+  <title>Central de Estudos | UNIFSA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="container">
-      <div class="eyebrow">UNIFSA • 2026.2</div>
-      <h1>Minha Central de Estudos</h1>
-      <p>Cidadania, Ética, Educação, Negociação e Sustentabilidade</p>
-      <div class="hero-actions">
-        <button class="btn" data-scroll="plano">Continuar estudando</button>
-        <button class="btn ghost" data-scroll="simulado">Fazer simulado</button>
+  <noscript>Ative o JavaScript para usar esta central de estudos.</noscript>
+
+  <div id="authView" class="auth-shell">
+    <section class="auth-intro" aria-labelledby="authTitle">
+      <div class="brand brand-light">
+        <span class="brand-mark" aria-hidden="true">CE</span>
+        <span>Central de Estudos</span>
       </div>
-    </div>
-  </header>
-
-  <nav class="nav">
-    <div class="container nav-inner">
-      <button data-scroll="painel">Painel</button>
-      <button data-scroll="plano">Plano</button>
-      <button data-scroll="resumos">Resumos</button>
-      <button data-scroll="flashcards">Flashcards</button>
-      <button data-scroll="simulado">Simulado</button>
-      <button data-scroll="videos">Vídeos</button>
-      <button data-scroll="notas">Notas</button>
-    </div>
-  </nav>
-
-  <main class="container">
-    <section id="painel" class="section">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">Visão geral</span>
-          <h2>Seu progresso</h2>
-        </div>
-      </div>
-
-      <div class="dashboard-grid">
-        <article class="card metric">
-          <span>Progresso do plano</span>
-          <strong id="progressPct">0%</strong>
-          <div class="progress"><div id="progressBar"></div></div>
-        </article>
-
-        <article class="card metric">
-          <span>Dias concluídos</span>
-          <strong id="daysDone">0/14</strong>
-          <small>marcados como estudados</small>
-        </article>
-
-        <article class="card metric">
-          <span>Melhor simulado</span>
-          <strong id="bestQuiz">—</strong>
-          <small>resultado salvo neste navegador</small>
-        </article>
-
-        <article class="card metric">
+      <div class="auth-copy">
+        <p class="eyebrow">Preparação para a avaliação</p>
+        <h1 id="authTitle">Estude com direção. Revise com confiança.</h1>
+        <p>Uma rotina simples para dominar Cidadania, Ética, Educação, Negociação e Sustentabilidade.</p>
+        <div class="auth-features" aria-label="Recursos disponíveis">
+          <span>Plano de 14 dias</span>
           <span>Flashcards</span>
-          <strong id="flashProgress">1/18</strong>
-          <small>avance no seu ritmo</small>
-        </article>
-      </div>
-
-      <div class="card pomodoro">
-        <div>
-          <span class="section-kicker">Foco</span>
-          <h3>Pomodoro</h3>
-          <p>25 minutos de estudo + 5 minutos de pausa.</p>
+          <span>Simulados</span>
+          <span>Sincronização online</span>
         </div>
-        <div class="timer-wrap">
-          <div class="timer" id="timer">25:00</div>
-          <div class="actions">
-            <button class="btn" id="timerStart">Iniciar</button>
-            <button class="btn secondary" id="timerPause">Pausar</button>
-            <button class="btn secondary" id="timerReset">Reiniciar</button>
+      </div>
+      <p class="auth-foot">Seu progresso fica associado à sua conta.</p>
+    </section>
+
+    <main class="auth-panel">
+      <div class="auth-card">
+        <div class="mobile-brand brand">
+          <span class="brand-mark" aria-hidden="true">CE</span>
+          <span>Central de Estudos</span>
+        </div>
+        <p class="eyebrow blue">Área do estudante</p>
+        <h2 id="formTitle">Entre na sua conta</h2>
+        <p id="formDescription" class="muted">Continue do ponto em que parou, em qualquer dispositivo.</p>
+
+        <form id="authForm" novalidate>
+          <div id="nameField" class="field hidden">
+            <label for="displayName">Seu nome</label>
+            <input id="displayName" name="displayName" type="text" autocomplete="name" placeholder="Como quer ser chamado">
           </div>
-        </div>
-      </div>
-    </section>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@exemplo.com" required>
+          </div>
+          <div class="field">
+            <div class="label-row">
+              <label for="password">Senha</label>
+              <button id="forgotPassword" class="text-button" type="button">Esqueci a senha</button>
+            </div>
+            <div class="password-wrap">
+              <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo de 6 caracteres" required>
+              <button id="togglePassword" class="icon-button" type="button" aria-label="Mostrar senha">Mostrar</button>
+            </div>
+          </div>
+          <p id="authMessage" class="form-message" role="status" aria-live="polite"></p>
+          <button id="authSubmit" class="button primary full" type="submit">Entrar</button>
+        </form>
 
-    <section id="plano" class="section">
-      <div class="section-head">
+        <p class="auth-switch">
+          <span id="switchPrompt">Ainda não possui conta?</span>
+          <button id="switchMode" class="text-button strong" type="button">Criar conta</button>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <div class="brand sidebar-brand">
+        <span class="brand-mark" aria-hidden="true">CE</span>
+        <span>Central de Estudos</span>
+      </div>
+      <nav id="mainNav" class="main-nav">
+        <button class="nav-item active" data-page="inicio"><span>⌂</span> Início</button>
+        <button class="nav-item" data-page="plano"><span>✓</span> Plano de estudo</button>
+        <button class="nav-item" data-page="resumos"><span>▤</span> Resumos</button>
+        <button class="nav-item" data-page="flashcards"><span>◇</span> Flashcards</button>
+        <button class="nav-item" data-page="simulado"><span>◎</span> Simulado</button>
+        <button class="nav-item" data-page="videos"><span>▶</span> Videoaulas</button>
+        <button class="nav-item" data-page="anotacoes"><span>✎</span> Anotações</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sync-state"><span id="syncDot" class="sync-dot"></span><span id="syncText">Sincronizado</span></div>
+        <button id="logoutButton" class="nav-item danger"><span>↪</span> Sair</button>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <button id="menuButton" class="menu-button" type="button" aria-label="Abrir menu">☰</button>
         <div>
-          <span class="section-kicker">Cronograma</span>
-          <h2>Plano de 14 dias</h2>
-          <p>Marque cada etapa ao concluir. Se estiver com pouco tempo, faça dois blocos por dia.</p>
+          <p id="pageKicker" class="top-kicker">Visão geral</p>
+          <h1 id="pageTitle">Bom estudo, Alisson</h1>
         </div>
-      </div>
-      <div id="planList" class="plan-grid"></div>
-    </section>
-
-    <section id="resumos" class="section">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">Conteúdo</span>
-          <h2>Resumos essenciais</h2>
-          <p>Organizados pelos temas centrais do plano de ensino.</p>
+        <div class="top-actions">
+          <div class="pomodoro-mini" aria-label="Cronômetro Pomodoro">
+            <span id="miniTimer">25:00</span>
+            <button id="miniTimerToggle" type="button">Iniciar</button>
+          </div>
+          <button id="userMenuButton" class="avatar" type="button" aria-label="Informações da conta">A</button>
         </div>
+      </header>
+
+      <main class="content">
+        <section id="page-inicio" class="page active" aria-labelledby="pageTitle">
+          <div class="hero-card">
+            <div>
+              <p class="eyebrow">Disciplina 2026.2</p>
+              <h2>Cidadania, Ética, Educação, Negociação e Sustentabilidade</h2>
+              <p>Avance um pouco por dia. O sistema salva seu progresso automaticamente.</p>
+              <button class="button light" data-go="plano">Continuar estudando</button>
+            </div>
+            <div class="hero-progress" aria-label="Progresso do plano">
+              <div id="progressRing" class="progress-ring"><strong id="heroPercent">0%</strong><span>concluído</span></div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card"><span class="stat-icon blue">✓</span><div><p>Dias concluídos</p><strong id="daysStat">0/14</strong></div></article>
+            <article class="stat-card"><span class="stat-icon green">◎</span><div><p>Melhor simulado</p><strong id="bestStat">—</strong></div></article>
+            <article class="stat-card"><span class="stat-icon amber">◷</span><div><p>Tempo sugerido hoje</p><strong>50 min</strong></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel">
+              <div class="panel-head"><div><p class="eyebrow blue">Próximo passo</p><h3 id="nextStudyTitle">Dia 1</h3></div><button class="text-button strong" data-go="plano">Ver plano</button></div>
+              <p id="nextStudyDescription" class="muted">Fundamentos de cidadania, democracia e educação.</p>
+              <div class="progress-line"><span id="progressLine"></span></div>
+              <p id="progressCaption" class="small muted">0 de 14 etapas concluídas</p>
+            </section>
+            <section class="panel focus-panel">
+              <div class="panel-head"><div><p class="eyebrow blue">Foco rápido</p><h3>Pomodoro</h3></div><span class="focus-badge">25 + 5</span></div>
+              <div id="focusTimer" class="focus-timer">25:00</div>
+              <div class="timer-actions"><button id="timerStart" class="button primary">Iniciar foco</button><button id="timerReset" class="button ghost">Reiniciar</button></div>
+            </section>
+          </div>
+
+          <section class="panel recent-panel">
+            <div class="panel-head"><div><p class="eyebrow blue">Desempenho</p><h3>Últimos simulados</h3></div><button class="text-button strong" data-go="simulado">Fazer simulado</button></div>
+            <div id="recentResults" class="results-list empty-state">Você ainda não realizou nenhum simulado.</div>
+          </section>
+        </section>
+
+        <section id="page-plano" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Rotina guiada</p><h2>Plano de estudo em 14 dias</h2><p>Marque cada dia quando concluir a leitura e a atividade indicada.</p></div><div class="compact-progress"><strong id="planPercent">0%</strong><span>do plano</span></div></div>
+          <div id="studyPlan" class="plan-grid"></div>
+        </section>
+
+        <section id="page-resumos" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Conteúdo essencial</p><h2>Resumos por unidade</h2><p>Leia entendendo as relações entre os conceitos, não apenas decorando definições.</p></div></div>
+          <div id="summaryList" class="summary-list"></div>
+        </section>
+
+        <section id="page-flashcards" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Memorização ativa</p><h2>Flashcards</h2><p>Tente responder mentalmente antes de virar o cartão.</p></div><div class="compact-progress"><strong id="flashCounter">1/1</strong><span>cartão</span></div></div>
+          <div class="flash-shell">
+            <button id="flashPrev" class="round-button" type="button" aria-label="Cartão anterior">←</button>
+            <button id="flashCard" class="flash-card" type="button" aria-label="Virar cartão">
+              <span id="flashLabel" class="eyebrow blue">Pergunta</span>
+              <strong id="flashText"></strong>
+              <small>Toque para ver a resposta</small>
+            </button>
+            <button id="flashNext" class="round-button" type="button" aria-label="Próximo cartão">→</button>
+          </div>
+          <div class="flash-actions"><button id="flashShuffle" class="button ghost">Embaralhar</button><button id="flashKnow" class="button primary">Já sei este</button></div>
+          <p id="flashMastery" class="center muted small"></p>
+        </section>
+
+        <section id="page-simulado" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p>São 20 questões sorteadas. Ao finalizar, você verá a explicação de cada resposta.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>respondidas</span></div></div>
+          <div id="quizStart" class="quiz-start panel">
+            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p>Separe cerca de 20 minutos, responda sem consultar e revise os erros no final.</p><button id="startQuiz" class="button primary">Começar simulado</button>
+          </div>
+          <form id="quizForm" class="quiz-form hidden"></form>
+          <div id="quizActions" class="quiz-actions hidden"><button id="finishQuiz" class="button primary" type="button">Finalizar e corrigir</button></div>
+          <div id="quizResult" class="quiz-result hidden"></div>
+        </section>
+
+        <section id="page-videos" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Aprenda por outros formatos</p><h2>Videoaulas recomendadas</h2><p>Os links abrem buscas direcionadas no YouTube para cada tema do plano.</p></div></div>
+          <div id="videoGrid" class="video-grid"></div>
+        </section>
+
+        <section id="page-anotacoes" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Seu caderno</p><h2>Anotações e dúvidas</h2><p>Registre conceitos importantes, exemplos da aula e pontos que precisa revisar.</p></div><span id="notesStatus" class="save-status">Tudo salvo</span></div>
+          <div class="notes-layout">
+            <div class="notes-editor panel"><label for="notesArea">Minhas anotações</label><textarea id="notesArea" placeholder="Exemplo: Equidade considera as necessidades diferentes para produzir oportunidades mais justas..."></textarea><p class="small muted">Salvamento automático após você parar de digitar.</p></div>
+            <aside class="panel study-tip"><p class="eyebrow blue">Método sugerido</p><h3>Anotação em 3 passos</h3><ol><li>Escreva o conceito com suas palavras.</li><li>Dê um exemplo do contexto escolar.</li><li>Crie uma pergunta que poderia cair na prova.</li></ol></aside>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="resetDialog" class="reset-dialog">
+    <form id="resetForm" method="dialog">
+      <p class="eyebrow blue">Recuperação de conta</p>
+      <h2>Defina a nova senha</h2>
+      <p class="muted">Use pelo menos 6 caracteres.</p>
+      <div class="field">
+        <label for="newPassword">Nova senha</label>
+        <input id="newPassword" type="password" minlength="6" autocomplete="new-password" required>
       </div>
-
-      <div id="summaryList" class="summary-list"></div>
-
-      <div class="notice">
-        <strong>Prioridade de revisão:</strong>
-        compare ética × moral; igualdade × equidade; preconceito × discriminação × racismo; negociação × mediação.
+      <p id="resetMessage" class="form-message" role="status"></p>
+      <div class="dialog-actions">
+        <button id="cancelReset" class="button ghost" type="button">Cancelar</button>
+        <button class="button primary" type="submit">Salvar nova senha</button>
       </div>
-    </section>
+    </form>
+  </dialog>
 
-    <section id="flashcards" class="section">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">Memorização</span>
-          <h2>Flashcards</h2>
-          <p>Tente responder antes de revelar a resposta.</p>
-        </div>
-      </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="accountPopover" class="account-popover hidden"><strong id="accountName"></strong><span id="accountEmail"></span></div>
 
-      <div class="card flash-card-area">
-        <button id="flashCard" class="flash-card" aria-label="Virar flashcard"></button>
-        <p class="helper">Clique no cartão para virar.</p>
-        <div class="actions center">
-          <button class="btn secondary" id="flashPrev">Anterior</button>
-          <button class="btn" id="flashNext">Próximo</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="simulado" class="section">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">Treino</span>
-          <h2>Simulado</h2>
-          <p>20 questões objetivas. Faça sem consultar os resumos.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <form id="quizForm"></form>
-        <div class="actions">
-          <button type="button" class="btn success" id="quizGrade">Corrigir simulado</button>
-          <button type="button" class="btn secondary" id="quizReset">Limpar respostas</button>
-        </div>
-        <div class="result" id="quizResult"></div>
-        <div class="feedback" id="quizFeedback"></div>
-      </div>
-    </section>
-
-    <section id="videos" class="section">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">Apoio</span>
-          <h2>Vídeos por assunto</h2>
-          <p>Os botões abrem buscas prontas no YouTube.</p>
-        </div>
-      </div>
-      <div class="card" id="videoList"></div>
-    </section>
-
-    <section id="notas" class="section">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">Revisão ativa</span>
-          <h2>Minhas anotações</h2>
-          <p>Registre dúvidas, conceitos difíceis e erros de simulados.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <textarea id="notes" placeholder="Ex.: sempre confundo ética e moral..."></textarea>
-        <div class="actions">
-          <button class="btn" id="saveNotes">Salvar anotações</button>
-        </div>
-        <p class="helper">As anotações ficam salvas neste navegador.</p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">Central de Estudos • UNIFSA • 2026.2</div>
-  </footer>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/config.js"></script>
+  <script src="assets/content.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>
