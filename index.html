@@ -1,356 +1,190 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plano de Estudos — Cidadania, Ética, Educação, Negociação e Sustentabilidade</title>
-<style>
-:root{
-  --bg:#f5f7fb; --card:#ffffff; --text:#162033; --muted:#637087; --primary:#3157d5;
-  --primary2:#5f7df0; --ok:#1f9d67; --warn:#f3a712; --border:#e3e8f0; --shadow:0 10px 30px rgba(29,48,89,.08);
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
-header{background:linear-gradient(135deg,#1d357d,#3157d5 62%,#6b85ee);color:#fff;padding:32px 18px}
-header .wrap,.wrap{max-width:1180px;margin:auto}
-h1{margin:0 0 8px;font-size:clamp(26px,4vw,42px)}
-.subtitle{opacity:.93;max-width:900px;line-height:1.5}
-.badge{display:inline-block;margin-top:12px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.16);font-size:13px}
-nav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--border);overflow:auto;white-space:nowrap}
-nav .wrap{display:flex;gap:6px;padding:10px 12px}
-nav button{border:0;background:transparent;padding:10px 12px;border-radius:9px;cursor:pointer;font-weight:600;color:#46536b}
-nav button:hover{background:#edf2ff;color:var(--primary)}
-main{padding:24px 16px 60px}
-.section{margin:0 auto 30px;max-width:1180px}
-.section h2{font-size:26px;margin:0 0 14px}
-.section p.lead{color:var(--muted);margin-top:-4px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
-.kpi b{font-size:30px;display:block;margin-top:6px}.kpi span{color:var(--muted);font-size:13px}
-.progress{height:12px;background:#e9edf5;border-radius:999px;overflow:hidden}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2));transition:.3s}
-.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--primary);color:#fff}.btn.secondary{background:#eef2ff;color:var(--primary)}.btn.ok{background:var(--ok)}
-.module{margin-bottom:12px}.module summary{cursor:pointer;font-weight:800;font-size:17px}.module ul{line-height:1.65;padding-left:22px}.module .key{background:#f6f8fe;border-left:4px solid var(--primary);padding:12px 14px;border-radius:8px;margin:12px 0}
-.plan{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.day{display:flex;gap:12px;align-items:flex-start}.day input{margin-top:4px;transform:scale(1.2)}.day.done{opacity:.62;text-decoration:line-through}
-.flashbox{min-height:210px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:22px;font-weight:800;padding:24px;border:2px dashed #cad4ee;border-radius:16px;background:#fbfcff;cursor:pointer}
-.flashhint{color:var(--muted);font-size:13px;margin-top:8px;text-align:center}
-.quiz-q{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}.quiz-q:last-child{border-bottom:0}.quiz-q label{display:block;margin:8px 0;padding:9px 10px;border-radius:8px;cursor:pointer}.quiz-q label:hover{background:#f4f7ff}
-.result{font-size:20px;font-weight:800;margin-top:14px}
-.video{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--border);padding:12px 0}.video:last-child{border:0}.video a{color:var(--primary);font-weight:800;text-decoration:none}
-textarea{width:100%;min-height:170px;border:1px solid var(--border);border-radius:12px;padding:12px;font:inherit}
-.timer{font-size:48px;font-weight:900;letter-spacing:2px;text-align:center;margin:10px 0 16px}
-.small{font-size:13px;color:var(--muted)}
-.notice{background:#fff8e5;border:1px solid #f3d88c;border-radius:12px;padding:13px 15px;color:#6b5518}
-.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:34px}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.plan{grid-template-columns:1fr}}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.video{align-items:flex-start;flex-direction:column}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#3157d5" />
+  <title>Central de Estudos — UNIFSA</title>
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-<header>
-<div class="wrap">
-  <h1>Central de Estudos</h1>
-  <div class="subtitle">Cidadania, Ética, Educação, Negociação e Sustentabilidade — material organizado a partir do plano de ensino UNIFSA 2026.2.</div>
-  <div class="badge">Sistema local • progresso salvo no navegador • funciona sem instalação</div>
-</div>
-</header>
+  <header class="hero">
+    <div class="container">
+      <div class="eyebrow">UNIFSA • 2026.2</div>
+      <h1>Minha Central de Estudos</h1>
+      <p>Cidadania, Ética, Educação, Negociação e Sustentabilidade</p>
+      <div class="hero-actions">
+        <button class="btn" data-scroll="plano">Continuar estudando</button>
+        <button class="btn ghost" data-scroll="simulado">Fazer simulado</button>
+      </div>
+    </div>
+  </header>
 
-<nav><div class="wrap">
-<button onclick="go('dashboard')">Painel</button>
-<button onclick="go('plano')">Plano</button>
-<button onclick="go('conteudo')">Conteúdo</button>
-<button onclick="go('flashcards')">Flashcards</button>
-<button onclick="go('quiz')">Simulado</button>
-<button onclick="go('videos')">Vídeos</button>
-<button onclick="go('notas')">Notas</button>
-</div></nav>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <button data-scroll="painel">Painel</button>
+      <button data-scroll="plano">Plano</button>
+      <button data-scroll="resumos">Resumos</button>
+      <button data-scroll="flashcards">Flashcards</button>
+      <button data-scroll="simulado">Simulado</button>
+      <button data-scroll="videos">Vídeos</button>
+      <button data-scroll="notas">Notas</button>
+    </div>
+  </nav>
 
-<main>
-<section class="section" id="dashboard">
-<h2>Seu painel</h2>
-<p class="lead">Use o sistema todos os dias até a prova. Marque os dias concluídos, revise os cartões e refaça o simulado.</p>
-<div class="grid">
-  <div class="card kpi"><span>Progresso do plano</span><b id="pct">0%</b><div class="progress"><div id="bar"></div></div></div>
-  <div class="card kpi"><span>Dias concluídos</span><b id="daysDone">0/14</b></div>
-  <div class="card kpi"><span>Melhor nota no simulado</span><b id="best">—</b></div>
-  <div class="card kpi"><span>Flashcard atual</span><b id="fcKpi">1/18</b></div>
-</div>
-<div class="card" style="margin-top:14px">
-  <h3 style="margin-top:0">Pomodoro de revisão</h3>
-  <div class="timer" id="timer">25:00</div>
-  <div class="actions" style="justify-content:center">
-    <button class="btn" onclick="startTimer()">Iniciar</button>
-    <button class="btn secondary" onclick="pauseTimer()">Pausar</button>
-    <button class="btn secondary" onclick="resetTimer()">Reiniciar</button>
-  </div>
-  <p class="small" style="text-align:center">Sugestão: 25 min de estudo + 5 min de pausa. Em cada bloco, estude um único tópico.</p>
-</div>
-</section>
+  <main class="container">
+    <section id="painel" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Visão geral</span>
+          <h2>Seu progresso</h2>
+        </div>
+      </div>
 
-<section class="section" id="plano">
-<h2>Plano de 14 dias</h2>
-<p class="lead">O cronograma está organizado para uma prova no fim do mês. Se sua prova for antes, faça dois blocos por dia.</p>
-<div class="plan" id="planList"></div>
-</section>
+      <div class="dashboard-grid">
+        <article class="card metric">
+          <span>Progresso do plano</span>
+          <strong id="progressPct">0%</strong>
+          <div class="progress"><div id="progressBar"></div></div>
+        </article>
 
-<section class="section" id="conteudo">
-<h2>Resumo do conteúdo</h2>
-<p class="lead">Os tópicos seguem a ementa e os objetivos da disciplina. As explicações abaixo são resumos didáticos complementares para facilitar a revisão.</p>
+        <article class="card metric">
+          <span>Dias concluídos</span>
+          <strong id="daysDone">0/14</strong>
+          <small>marcados como estudados</small>
+        </article>
 
-<details class="card module" open>
-<summary>1. Cidadania, democracia, educação e direitos humanos</summary>
-<div class="key"><b>Ideia central:</b> cidadania envolve participação na vida social e política, exercício de direitos e cumprimento de deveres. Democracia pressupõe participação, pluralidade e respeito às regras e direitos.</div>
-<ul>
-<li><b>Direitos humanos:</b> protegem a dignidade humana e orientam a defesa da igualdade, liberdade e não discriminação.</li>
-<li><b>Na educação:</b> a escola participa da formação cidadã quando promove participação, respeito, pensamento crítico, inclusão e justiça social.</li>
-<li><b>Responsabilidade social:</b> relaciona decisões individuais e coletivas aos impactos sobre outras pessoas e a comunidade.</li>
-</ul>
-</details>
+        <article class="card metric">
+          <span>Melhor simulado</span>
+          <strong id="bestQuiz">—</strong>
+          <small>resultado salvo neste navegador</small>
+        </article>
 
-<details class="card module">
-<summary>2. Inclusão, diversidade, desigualdades étnico-raciais e justiça social</summary>
-<div class="key"><b>Ideia central:</b> igualdade não significa tratar todas as pessoas de modo idêntico quando existem desigualdades históricas. A equidade procura criar condições mais justas de participação.</div>
-<ul>
-<li>Reconhecer desigualdades étnico-raciais é essencial para compreender obstáculos históricos e sociais.</li>
-<li>Inclusão exige remover barreiras de acesso, participação e aprendizagem.</li>
-<li>Justiça social envolve combater exclusões e ampliar oportunidades e direitos.</li>
-</ul>
-</details>
+        <article class="card metric">
+          <span>Flashcards</span>
+          <strong id="flashProgress">1/18</strong>
+          <small>avance no seu ritmo</small>
+        </article>
+      </div>
 
-<details class="card module">
-<summary>3. Racismo, preconceito e discriminação no contexto escolar</summary>
-<div class="key"><b>Diferença importante:</b> preconceito é uma atitude/julgamento prévio; discriminação é a prática de tratamento desigual; racismo estrutura hierarquias e desigualdades baseadas em raça/cor.</div>
-<ul>
-<li>A escola deve prevenir e enfrentar práticas discriminatórias, não apenas reagir quando o conflito já ocorreu.</li>
-<li>Práticas pedagógicas antirracistas valorizam diversidade, representação, respeito e análise crítica das desigualdades.</li>
-<li>O objetivo indicado no plano é analisar criticamente relações étnico-raciais e combater diferentes formas de discriminação.</li>
-</ul>
-</details>
+      <div class="card pomodoro">
+        <div>
+          <span class="section-kicker">Foco</span>
+          <h3>Pomodoro</h3>
+          <p>25 minutos de estudo + 5 minutos de pausa.</p>
+        </div>
+        <div class="timer-wrap">
+          <div class="timer" id="timer">25:00</div>
+          <div class="actions">
+            <button class="btn" id="timerStart">Iniciar</button>
+            <button class="btn secondary" id="timerPause">Pausar</button>
+            <button class="btn secondary" id="timerReset">Reiniciar</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<details class="card module">
-<summary>4. Introdução à ética: ética e moral</summary>
-<div class="key"><b>Ética:</b> reflexão crítica sobre valores, princípios e critérios que orientam decisões. <b>Moral:</b> conjunto de normas, costumes e valores praticados por um grupo ou sociedade.</div>
-<ul>
-<li>Dilemas éticos aparecem quando valores ou deveres entram em conflito e exigem decisão justificada.</li>
-<li>Uma análise ética considera consequências, deveres, direitos, justiça e responsabilidade.</li>
-<li>Na formação do educador, a ética orienta relações profissionais, respeito aos estudantes e responsabilidade com a comunidade.</li>
-</ul>
-</details>
+    <section id="plano" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Cronograma</span>
+          <h2>Plano de 14 dias</h2>
+          <p>Marque cada etapa ao concluir. Se estiver com pouco tempo, faça dois blocos por dia.</p>
+        </div>
+      </div>
+      <div id="planList" class="plan-grid"></div>
+    </section>
 
-<details class="card module">
-<summary>5. Ética profissional, social e política</summary>
-<div class="key"><b>Na prática profissional:</b> agir com responsabilidade, respeito, integridade, confidencialidade quando aplicável, justiça e compromisso com o interesse coletivo.</div>
-<ul>
-<li>Ética profissional não é somente obedecer regras; envolve avaliar impactos das decisões.</li>
-<li>Ética social observa como escolhas e instituições afetam a convivência e o bem comum.</li>
-<li>Ética política envolve responsabilidade pública, participação, justiça e respeito aos direitos.</li>
-</ul>
-</details>
+    <section id="resumos" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Conteúdo</span>
+          <h2>Resumos essenciais</h2>
+          <p>Organizados pelos temas centrais do plano de ensino.</p>
+        </div>
+      </div>
 
-<details class="card module">
-<summary>6. Comunicação, negociação e mediação de conflitos</summary>
-<div class="key"><b>Negociar:</b> buscar uma solução possível entre interesses diferentes. <b>Mediar:</b> facilitar o diálogo para que as partes construam uma solução.</div>
-<ul>
-<li>Escuta ativa, clareza, respeito e foco no problema ajudam a reduzir escaladas de conflito.</li>
-<li>Procure separar pessoas do problema e identificar interesses reais, não apenas posições declaradas.</li>
-<li>No contexto escolar, a mediação pode transformar o conflito em oportunidade de diálogo e aprendizagem.</li>
-</ul>
-</details>
+      <div id="summaryList" class="summary-list"></div>
 
-<details class="card module">
-<summary>7. Ética no mundo digital e cidadania digital</summary>
-<div class="key"><b>Cidadania digital:</b> uso responsável, crítico, seguro e respeitoso das tecnologias digitais.</div>
-<ul>
-<li>Temas importantes: privacidade, exposição de dados, respeito, cyberbullying, desinformação e responsabilidade pelo que se publica.</li>
-<li>Antes de compartilhar conteúdo, é importante verificar fonte, contexto e possíveis danos.</li>
-<li>O ambiente digital não elimina responsabilidades éticas existentes fora dele.</li>
-</ul>
-</details>
+      <div class="notice">
+        <strong>Prioridade de revisão:</strong>
+        compare ética × moral; igualdade × equidade; preconceito × discriminação × racismo; negociação × mediação.
+      </div>
+    </section>
 
-<details class="card module">
-<summary>8. Sustentabilidade, responsabilidade socioambiental e Agenda 2030</summary>
-<div class="key"><b>Sustentabilidade:</b> integração das dimensões social, econômica e ambiental para atender necessidades presentes sem comprometer o futuro.</div>
-<ul>
-<li>A Agenda 2030 organiza objetivos de desenvolvimento sustentável (ODS) em temas sociais, econômicos e ambientais.</li>
-<li>Na educação, sustentabilidade pode aparecer em projetos, hábitos institucionais e formação para responsabilidade coletiva.</li>
-<li>O plano destaca a escola como espaço de práticas educativas éticas, inclusivas e sustentáveis.</li>
-</ul>
-</details>
+    <section id="flashcards" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Memorização</span>
+          <h2>Flashcards</h2>
+          <p>Tente responder antes de revelar a resposta.</p>
+        </div>
+      </div>
 
-<div class="notice"><b>Foco de prova:</b> compare conceitos parecidos (ética × moral; preconceito × discriminação × racismo; igualdade × equidade; negociação × mediação) e treine a aplicação em situações escolares.</div>
-</section>
+      <div class="card flash-card-area">
+        <button id="flashCard" class="flash-card" aria-label="Virar flashcard"></button>
+        <p class="helper">Clique no cartão para virar.</p>
+        <div class="actions center">
+          <button class="btn secondary" id="flashPrev">Anterior</button>
+          <button class="btn" id="flashNext">Próximo</button>
+        </div>
+      </div>
+    </section>
 
-<section class="section" id="flashcards">
-<h2>Flashcards</h2>
-<p class="lead">Clique no cartão para virar. Depois use “Próximo”. Tente responder antes de revelar.</p>
-<div class="card">
-  <div class="flashbox" id="flashbox" onclick="flipCard()"></div>
-  <div class="flashhint">Clique para mostrar pergunta/resposta</div>
-  <div class="actions" style="justify-content:center;margin-top:14px">
-    <button class="btn secondary" onclick="prevCard()">Anterior</button>
-    <button class="btn" onclick="nextCard()">Próximo</button>
-  </div>
-</div>
-</section>
+    <section id="simulado" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Treino</span>
+          <h2>Simulado</h2>
+          <p>20 questões objetivas. Faça sem consultar os resumos.</p>
+        </div>
+      </div>
 
-<section class="section" id="quiz">
-<h2>Simulado</h2>
-<p class="lead">20 questões objetivas. Faça sem consultar o resumo e corrija no final.</p>
-<div class="card">
-<form id="quizForm"></form>
-<button type="button" class="btn ok" onclick="gradeQuiz()">Corrigir simulado</button>
-<button type="button" class="btn secondary" onclick="resetQuiz()">Limpar respostas</button>
-<div class="result" id="result"></div>
-<div id="feedback" class="small" style="margin-top:10px"></div>
-</div>
-</section>
+      <div class="card">
+        <form id="quizForm"></form>
+        <div class="actions">
+          <button type="button" class="btn success" id="quizGrade">Corrigir simulado</button>
+          <button type="button" class="btn secondary" id="quizReset">Limpar respostas</button>
+        </div>
+        <div class="result" id="quizResult"></div>
+        <div class="feedback" id="quizFeedback"></div>
+      </div>
+    </section>
 
-<section class="section" id="videos">
-<h2>Vídeos para complementar</h2>
-<p class="lead">Como este arquivo funciona offline, os links abaixo abrem buscas prontas no YouTube. Escolha preferencialmente aulas de universidades, professores reconhecidos, ONU/UNESCO ou canais educacionais.</p>
-<div class="card" id="videoList"></div>
-</section>
+    <section id="videos" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Apoio</span>
+          <h2>Vídeos por assunto</h2>
+          <p>Os botões abrem buscas prontas no YouTube.</p>
+        </div>
+      </div>
+      <div class="card" id="videoList"></div>
+    </section>
 
-<section class="section" id="notas">
-<h2>Suas anotações</h2>
-<p class="lead">Escreva dúvidas, exemplos de prova e conceitos que você sempre confunde. O texto fica salvo neste navegador.</p>
-<textarea id="notes" placeholder="Ex.: diferença entre ética e moral; exemplo de mediação de conflito; ODS que lembro..."></textarea>
-<div class="actions" style="margin-top:10px"><button class="btn" onclick="saveNotes()">Salvar anotações</button></div>
-</section>
+    <section id="notas" class="section">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Revisão ativa</span>
+          <h2>Minhas anotações</h2>
+          <p>Registre dúvidas, conceitos difíceis e erros de simulados.</p>
+        </div>
+      </div>
 
-<div class="footer">Material de apoio complementar. Base temática: Plano de Ensino e Aprendizagem — UNIFSA, 2026.2.</div>
-</main>
+      <div class="card">
+        <textarea id="notes" placeholder="Ex.: sempre confundo ética e moral..."></textarea>
+        <div class="actions">
+          <button class="btn" id="saveNotes">Salvar anotações</button>
+        </div>
+        <p class="helper">As anotações ficam salvas neste navegador.</p>
+      </div>
+    </section>
+  </main>
 
-<script>
-const plan = [
-"Dia 1 — Cidadania, democracia e educação + 10 flashcards",
-"Dia 2 — Direitos humanos, inclusão, diversidade e justiça social",
-"Dia 3 — Desigualdades étnico-raciais + estudo de caso",
-"Dia 4 — Racismo, preconceito e discriminação + revisão dos dias 1–3",
-"Dia 5 — Introdução à ética: ética × moral + dilemas éticos",
-"Dia 6 — Ética profissional, social e política",
-"Dia 7 — Revisão geral da 1ª semana + simulado",
-"Dia 8 — Comunicação e negociação",
-"Dia 9 — Mediação de conflitos no contexto educacional",
-"Dia 10 — Ética no mundo digital e cidadania digital",
-"Dia 11 — Sustentabilidade e responsabilidade socioambiental",
-"Dia 12 — Agenda 2030 + papel da escola na formação cidadã",
-"Dia 13 — Simulado completo + revisar todos os erros",
-"Dia 14 — Revisão leve: conceitos-chave, flashcards e dúvidas"
-];
+  <footer>
+    <div class="container">Central de Estudos • UNIFSA • 2026.2</div>
+  </footer>
 
-const cards = [
-["O que é cidadania?","Participação na vida social e política, com exercício de direitos e cumprimento de deveres."],
-["Qual a relação entre democracia e cidadania?","A democracia depende da participação cidadã, do pluralismo, do respeito às regras e aos direitos."],
-["O que são direitos humanos?","Direitos ligados à dignidade humana, voltados à proteção da liberdade, igualdade e não discriminação."],
-["Igualdade e equidade são iguais?","Não. Igualdade busca tratamento igual; equidade considera diferenças e desigualdades para produzir condições mais justas."],
-["Preconceito, discriminação e racismo: qual a diferença?","Preconceito é julgamento prévio; discriminação é tratamento desigual; racismo produz ou sustenta hierarquias e desigualdades raciais."],
-["O que é ética?","Reflexão crítica sobre valores, princípios e critérios que orientam decisões e condutas."],
-["O que é moral?","Conjunto de normas, valores e costumes compartilhados e praticados por grupos ou sociedades."],
-["O que é um dilema ético?","Situação em que valores, deveres ou interesses entram em conflito e exigem decisão justificada."],
-["O que caracteriza ética profissional?","Responsabilidade, respeito, integridade, justiça e avaliação dos impactos das decisões profissionais."],
-["O que é negociação?","Processo de busca de acordo ou solução possível entre interesses diferentes."],
-["O que é mediação?","Facilitação do diálogo entre partes em conflito para que construam uma solução."],
-["O que é escuta ativa?","Ouvir com atenção para compreender conteúdo, interesses e sentimentos, confirmando o entendimento."],
-["O que é cidadania digital?","Uso responsável, crítico, seguro e respeitoso das tecnologias digitais."],
-["Quais riscos éticos existem no mundo digital?","Exposição de dados, cyberbullying, desinformação, desrespeito, manipulação e compartilhamento irresponsável."],
-["O que é sustentabilidade?","Integração de dimensões social, econômica e ambiental visando necessidades presentes e futuras."],
-["O que é Agenda 2030?","Agenda internacional de desenvolvimento sustentável estruturada em Objetivos de Desenvolvimento Sustentável (ODS)."],
-["Qual o papel da escola na formação cidadã?","Promover participação, pensamento crítico, inclusão, respeito, justiça social e práticas responsáveis."],
-["Qual estratégia ajuda a resolver conflitos?","Separar pessoas do problema, ouvir interesses, comunicar com respeito e buscar solução colaborativa."]
-];
-
-const quiz = [
-{q:"1. A cidadania está mais relacionada a:",o:["Apenas votar em eleições","Participar da vida social e política, exercendo direitos e deveres","Somente conhecer as leis","Evitar conflitos sociais"],a:1},
-{q:"2. A equidade diferencia-se da igualdade porque:",o:["Elimina direitos universais","Considera desigualdades e necessidades para promover condições mais justas","Significa tratar todos sempre de forma idêntica","Aplica-se apenas ao trabalho"],a:1},
-{q:"3. Qual alternativa representa melhor um direito humano?",o:["Um privilégio de determinada profissão","Uma proteção ligada à dignidade de todas as pessoas","Uma regra opcional da escola","Uma vantagem concedida por amizade"],a:1},
-{q:"4. Preconceito é:",o:["A prática concreta de tratamento desigual","Um julgamento ou atitude prévia sobre pessoas ou grupos","Uma técnica de mediação","Uma política de inclusão"],a:1},
-{q:"5. Discriminação é:",o:["Tratamento desigual ou exclusão baseada em determinada característica","Apenas uma opinião privada sem efeito","Sinônimo de negociação","Forma de sustentabilidade"],a:0},
-{q:"6. Ética pode ser entendida como:",o:["Reflexão crítica sobre valores e condutas","Qualquer costume social, sem reflexão","Apenas cumprimento de ordens","Somente leis escritas"],a:0},
-{q:"7. Moral refere-se principalmente a:",o:["Normas, valores e costumes praticados em um grupo ou sociedade","Um método de negociação","Uma lei ambiental","Um recurso tecnológico"],a:0},
-{q:"8. Em um dilema ético:",o:["Não existe conflito entre valores","A decisão é sempre óbvia","Valores ou deveres podem entrar em conflito","A única solução é evitar decidir"],a:2},
-{q:"9. Uma conduta profissional ética envolve:",o:["Favorecer pessoas conhecidas","Ignorar impactos das decisões","Responsabilidade, respeito e justiça","Agir apenas por interesse pessoal"],a:2},
-{q:"10. Negociação é melhor definida como:",o:["Imposição de uma decisão","Busca de solução entre interesses diferentes","Aplicação de punição automática","Abandono do diálogo"],a:1},
-{q:"11. Na mediação de conflitos, o mediador deve:",o:["Decidir sozinho quem tem razão","Facilitar o diálogo entre as partes","Aumentar a disputa","Representar somente uma parte"],a:1},
-{q:"12. Escuta ativa significa:",o:["Esperar sua vez de falar","Ouvir para compreender e confirmar o entendimento","Ignorar sentimentos","Interromper para acelerar a conversa"],a:1},
-{q:"13. Cidadania digital envolve:",o:["Uso responsável, crítico e seguro das tecnologias","Compartilhar tudo rapidamente","Evitar qualquer tecnologia","Usar contas anônimas"],a:0},
-{q:"14. Antes de compartilhar informação online, uma atitude ética é:",o:["Verificar fonte e contexto","Compartilhar primeiro e conferir depois","Confiar apenas no título","Ignorar possíveis danos"],a:0},
-{q:"15. Sustentabilidade integra:",o:["Somente meio ambiente","Somente economia","Dimensões social, econômica e ambiental","Apenas tecnologia"],a:2},
-{q:"16. A Agenda 2030 está relacionada a:",o:["Objetivos de Desenvolvimento Sustentável","Regras de trânsito","Normas de uma escola específica","Código profissional único"],a:0},
-{q:"17. Uma prática escolar inclusiva busca:",o:["Remover barreiras de participação e aprendizagem","Separar alunos por diferenças","Evitar diversidade","Aplicar exatamente o mesmo recurso em qualquer situação"],a:0},
-{q:"18. Uma postura antirracista na escola envolve:",o:["Ignorar o tema para evitar conflitos","Reconhecer desigualdades e enfrentar práticas discriminatórias","Tratar racismo como opinião pessoal","Abordar o assunto apenas quando houver denúncia"],a:1},
-{q:"19. Ao mediar um conflito escolar, é adequado:",o:["Atacar a pessoa","Separar pessoas do problema e identificar interesses","Aumentar a pressão emocional","Evitar ouvir as partes"],a:1},
-{q:"20. O papel da escola na formação cidadã inclui:",o:["Somente transmitir conteúdo","Promover participação, criticidade, inclusão e responsabilidade","Evitar temas sociais","Substituir totalmente a família e a comunidade"],a:1}
-];
-
-const videos = [
-["Cidadania, democracia e direitos humanos","https://www.youtube.com/results?search_query=cidadania+democracia+direitos+humanos+educa%C3%A7%C3%A3o"],
-["Ética e moral — diferenças e exemplos","https://www.youtube.com/results?search_query=%C3%A9tica+e+moral+diferen%C3%A7a+aula"],
-["Relações étnico-raciais na educação","https://www.youtube.com/results?search_query=rela%C3%A7%C3%B5es+%C3%A9tnico+raciais+educa%C3%A7%C3%A3o+aula"],
-["Racismo, preconceito e discriminação","https://www.youtube.com/results?search_query=racismo+preconceito+discrimina%C3%A7%C3%A3o+educa%C3%A7%C3%A3o"],
-["Negociação e mediação de conflitos na escola","https://www.youtube.com/results?search_query=media%C3%A7%C3%A3o+de+conflitos+na+escola+negocia%C3%A7%C3%A3o"],
-["Ética e cidadania digital","https://www.youtube.com/results?search_query=%C3%A9tica+cidadania+digital+aula"],
-["Agenda 2030 e Objetivos de Desenvolvimento Sustentável","https://www.youtube.com/results?search_query=Agenda+2030+ODS+ONU+portugu%C3%AAs"],
-["Sustentabilidade e educação","https://www.youtube.com/results?search_query=sustentabilidade+educa%C3%A7%C3%A3o+aula"]
-];
-
-function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
-
-function renderPlan(){
- const el=document.getElementById("planList"); el.innerHTML="";
- const state=JSON.parse(localStorage.getItem("studyPlan")||"[]");
- plan.forEach((d,i)=>{
-   const c=document.createElement("div"); c.className="card day"+(state[i]?" done":"");
-   c.innerHTML=`<input type="checkbox" ${state[i]?"checked":""} onchange="toggleDay(${i},this.checked)"><div><b>${d.split(" — ")[0]}</b><br>${d.split(" — ")[1]||""}</div>`;
-   el.appendChild(c);
- });
- updateProgress();
-}
-function toggleDay(i,v){let s=JSON.parse(localStorage.getItem("studyPlan")||"[]"); s[i]=v; localStorage.setItem("studyPlan",JSON.stringify(s)); renderPlan()}
-function updateProgress(){let s=JSON.parse(localStorage.getItem("studyPlan")||"[]"); let n=plan.filter((_,i)=>s[i]).length; let p=Math.round(n/plan.length*100); document.getElementById("pct").textContent=p+"%"; document.getElementById("daysDone").textContent=n+"/"+plan.length; document.getElementById("bar").style.width=p+"%"; document.getElementById("best").textContent=localStorage.getItem("bestQuiz")?localStorage.getItem("bestQuiz")+"%":"—"}
-
-let ci=0, showAnswer=false;
-function renderCard(){document.getElementById("flashbox").textContent=showAnswer?cards[ci][1]:cards[ci][0]; document.getElementById("fcKpi").textContent=(ci+1)+"/"+cards.length}
-function flipCard(){showAnswer=!showAnswer;renderCard()}
-function nextCard(){ci=(ci+1)%cards.length;showAnswer=false;renderCard()}
-function prevCard(){ci=(ci-1+cards.length)%cards.length;showAnswer=false;renderCard()}
-
-function renderQuiz(){
- let f=document.getElementById("quizForm"); f.innerHTML="";
- quiz.forEach((x,i)=>{
-   let d=document.createElement("div"); d.className="quiz-q";
-   d.innerHTML=`<b>${x.q}</b>`+x.o.map((opt,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`).join("");
-   f.appendChild(d);
- });
-}
-function gradeQuiz(){
- let score=0, missing=0, wrong=[];
- quiz.forEach((x,i)=>{
-   let e=document.querySelector(`input[name="q${i}"]:checked`);
-   if(!e){missing++;return}
-   if(Number(e.value)===x.a) score++; else wrong.push(i+1);
- });
- let pct=Math.round(score/quiz.length*100);
- document.getElementById("result").textContent=`Resultado: ${score}/${quiz.length} — ${pct}%`;
- document.getElementById("feedback").textContent=missing?`Você deixou ${missing} questão(ões) sem resposta. Questões erradas: ${wrong.length?wrong.join(", "):"nenhuma"}.`:`Questões erradas: ${wrong.length?wrong.join(", "):"nenhuma"}.`;
- let best=Number(localStorage.getItem("bestQuiz")||0); if(pct>best)localStorage.setItem("bestQuiz",pct); updateProgress();
-}
-function resetQuiz(){document.getElementById("quizForm").reset();document.getElementById("result").textContent="";document.getElementById("feedback").textContent=""}
-
-function renderVideos(){
- const v=document.getElementById("videoList"); v.innerHTML="";
- videos.forEach(x=>{let d=document.createElement("div");d.className="video";d.innerHTML=`<span>${x[0]}</span><a target="_blank" rel="noopener" href="${x[1]}">Abrir busca no YouTube →</a>`;v.appendChild(d)})
-}
-function saveNotes(){localStorage.setItem("studyNotes",document.getElementById("notes").value); alert("Anotações salvas neste navegador.")}
-document.getElementById("notes").value=localStorage.getItem("studyNotes")||"";
-
-let total=25*60, t=total, interval=null;
-function drawTimer(){let m=Math.floor(t/60),s=t%60;document.getElementById("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
-function startTimer(){if(interval)return;interval=setInterval(()=>{if(t>0){t--;drawTimer()}else{clearInterval(interval);interval=null;alert("Bloco concluído! Faça uma pausa curta.")}},1000)}
-function pauseTimer(){clearInterval(interval);interval=null}
-function resetTimer(){pauseTimer();t=total;drawTimer()}
-
-renderPlan(); renderCard(); renderQuiz(); renderVideos(); drawTimer();
-</script>
+  <script src="assets/app.js"></script>
 </body>
 </html>
