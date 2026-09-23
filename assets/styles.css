@@ -78,6 +78,10 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
 .app-shell { min-height: 100vh; }
 .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 30; display: flex; width: 260px; flex-direction: column; border-right: 1px solid #dbe4ee; background: #fff; }
 .sidebar-brand { height: 92px; padding: 0 24px; border-bottom: 1px solid #edf1f6; }
+.subject-switcher { padding: 17px 18px 7px; }
+.subject-switcher label { display: block; margin: 0 0 7px 2px; color: var(--muted); font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.subject-switcher select { width: 100%; height: 42px; padding: 0 34px 0 11px; border: 1px solid var(--line); border-radius: 10px; color: var(--navy); background: #f8fafd; font-weight: 700; outline: none; }
+.subject-switcher select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.10); }
 .main-nav { display: flex; flex: 1; flex-direction: column; gap: 4px; padding: 22px 14px; }
 .nav-item { display: flex; width: 100%; align-items: center; gap: 12px; padding: 12px 14px; border: 0; border-radius: 10px; color: #526078; background: transparent; text-align: left; font-size: .91rem; font-weight: 600; }
 .nav-item span { width: 21px; color: #8290a5; text-align: center; font-size: 1.08rem; }
@@ -155,6 +159,10 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
 .plan-card.done .check-button { border-color: var(--green); color: white; background: var(--green); }
 
 .summary-list { display: grid; gap: 13px; }
+.summary-intro { align-items: flex-end; }
+.summary-search { width: min(100%, 310px); }
+.summary-search input { height: 43px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .summary-item { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: white; }
 .summary-toggle { display: grid; width: 100%; grid-template-columns: 46px 1fr auto; align-items: center; gap: 15px; padding: 18px 20px; border: 0; color: var(--ink); background: white; text-align: left; }
 .summary-index { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 11px; color: var(--blue); background: var(--blue-soft); font-weight: 800; }
@@ -179,6 +187,23 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
 .flash-card.answer { color: white; background: linear-gradient(145deg, var(--navy), #1c5da7); }
 .flash-card.answer .eyebrow, .flash-card.answer small { color: #d3e6ff; }
 .flash-actions { display: flex; justify-content: center; gap: 10px; }
+
+.practice-intro { margin-bottom: 17px; color: #40506a; }
+.practice-intro h3 { margin-bottom: 9px; }
+.practice-intro p { margin: 7px 0; }
+.practice-intro pre, .practice-answer pre { overflow-x: auto; padding: 15px; border-radius: 11px; color: #d9e8ff; background: #0d2445; font-family: Consolas, "Courier New", monospace; font-size: .84rem; line-height: 1.55; }
+.practice-list { display: grid; gap: 13px; }
+.practice-card { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: white; }
+.practice-question { display: grid; width: 100%; grid-template-columns: 42px 1fr auto; align-items: center; gap: 13px; padding: 17px 19px; border: 0; color: var(--ink); background: white; text-align: left; }
+.practice-number { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 10px; color: var(--blue); background: var(--blue-soft); font-weight: 800; }
+.practice-question strong { line-height: 1.45; }
+.practice-question small { color: var(--muted); }
+.practice-answer { display: none; padding: 0 22px 22px 74px; color: #43526a; line-height: 1.6; }
+.practice-card.open .practice-answer { display: block; }
+.practice-card.open .practice-chevron { transform: rotate(180deg); }
+.practice-chevron { color: var(--blue); transition: transform .2s; }
+.practice-answer .answer-label { color: var(--green); font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.practice-answer code { padding: 2px 5px; border-radius: 5px; color: #144b86; background: #eaf2ff; font-family: Consolas, monospace; }
 
 .quiz-start { max-width: 650px; margin: 50px auto; text-align: center; }
 .large-icon { display: grid; width: 74px; height: 74px; margin: 0 auto 20px; place-items: center; border-radius: 50%; color: var(--blue); background: var(--blue-soft); font-size: 2rem; }
@@ -207,6 +232,12 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
 .video-content h3 { min-height: 45px; }
 .video-content p { min-height: 62px; color: var(--muted); font-size: .83rem; }
 .video-link { color: var(--blue); font-size: .84rem; font-weight: 800; text-decoration: none; }
+.video-channel { display: block; margin: 8px 0 0; color: #8794a8; font-size: .72rem; }
+
+body[data-subject="banco"] { --blue: #6d4de8; --blue-soft: #f0edff; --navy: #2d225c; --navy-2: #47358d; }
+body[data-subject="banco"] .hero-card { background: radial-gradient(circle at 85% 20%, rgba(174,145,255,.42), transparent 24%), linear-gradient(135deg, #2c215d, #6448c6); }
+body[data-subject="banco"] .progress-ring { background: radial-gradient(circle at center, #553daf 56%, transparent 57%), conic-gradient(#c7b6ff calc(var(--p) * 1%), rgba(255,255,255,.17) 0); }
+body[data-subject="banco"] .video-cover { background: linear-gradient(140deg, #2d225c, #7658dc); }
 
 .notes-layout { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 20px; }
 .notes-editor label { display: block; margin-bottom: 10px; font-weight: 800; }
@@ -256,6 +287,8 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
   .plan-grid { grid-template-columns: 1fr; }
   .summary-body { padding: 0 19px 21px; }
   .notes-layout { grid-template-columns: 1fr; }
+  .summary-intro { display: block; }
+  .summary-search { margin-top: 14px; }
 }
 
 @media (max-width: 560px) {
@@ -276,6 +309,8 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
   .flash-actions { margin-top: 74px; }
   .video-grid { grid-template-columns: 1fr; }
   .question-card { padding: 18px; }
+  .practice-question { grid-template-columns: 38px 1fr auto; padding: 14px; }
+  .practice-answer { padding: 0 16px 18px; }
   .quiz-actions { justify-content: stretch; }
   .quiz-actions .button { width: 100%; }
   .account-popover { right: 15px; }

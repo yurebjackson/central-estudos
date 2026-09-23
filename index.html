@@ -23,9 +23,10 @@
       <div class="auth-copy">
         <p class="eyebrow">Preparação para a avaliação</p>
         <h1 id="authTitle">Estude com direção. Revise com confiança.</h1>
-        <p>Uma rotina simples para dominar Cidadania, Ética, Educação, Negociação e Sustentabilidade.</p>
+        <p>Uma rotina completa para estudar Ética e Cidadania, Banco de Dados Relacional e as próximas disciplinas que você adicionar.</p>
         <div class="auth-features" aria-label="Recursos disponíveis">
-          <span>Plano de 14 dias</span>
+          <span>Duas disciplinas</span>
+          <span>Planos de 14 dias</span>
           <span>Flashcards</span>
           <span>Simulados</span>
           <span>Sincronização online</span>
@@ -81,11 +82,19 @@
         <span class="brand-mark" aria-hidden="true">CE</span>
         <span>Central de Estudos</span>
       </div>
+      <div class="subject-switcher">
+        <label for="subjectSelect">Disciplina atual</label>
+        <select id="subjectSelect">
+          <option value="etica">Ética e Cidadania</option>
+          <option value="banco">Banco de Dados</option>
+        </select>
+      </div>
       <nav id="mainNav" class="main-nav">
         <button class="nav-item active" data-page="inicio"><span>⌂</span> Início</button>
         <button class="nav-item" data-page="plano"><span>✓</span> Plano de estudo</button>
         <button class="nav-item" data-page="resumos"><span>▤</span> Resumos</button>
         <button class="nav-item" data-page="flashcards"><span>◇</span> Flashcards</button>
+        <button class="nav-item" data-page="pratica"><span>⌘</span> Prática</button>
         <button class="nav-item" data-page="simulado"><span>◎</span> Simulado</button>
         <button class="nav-item" data-page="videos"><span>▶</span> Videoaulas</button>
         <button class="nav-item" data-page="anotacoes"><span>✎</span> Anotações</button>
@@ -117,8 +126,8 @@
           <div class="hero-card">
             <div>
               <p class="eyebrow">Disciplina 2026.2</p>
-              <h2>Cidadania, Ética, Educação, Negociação e Sustentabilidade</h2>
-              <p>Avance um pouco por dia. O sistema salva seu progresso automaticamente.</p>
+              <h2 id="heroTitle">Cidadania, Ética, Educação, Negociação e Sustentabilidade</h2>
+              <p id="heroDescription">Avance um pouco por dia. O sistema salva seu progresso automaticamente.</p>
               <button class="button light" data-go="plano">Continuar estudando</button>
             </div>
             <div class="hero-progress" aria-label="Progresso do plano">
@@ -153,12 +162,12 @@
         </section>
 
         <section id="page-plano" class="page">
-          <div class="section-intro"><div><p class="eyebrow blue">Rotina guiada</p><h2>Plano de estudo em 14 dias</h2><p>Marque cada dia quando concluir a leitura e a atividade indicada.</p></div><div class="compact-progress"><strong id="planPercent">0%</strong><span>do plano</span></div></div>
+          <div class="section-intro"><div><p class="eyebrow blue">Rotina guiada</p><h2 id="planTitle">Plano de estudo em 14 dias</h2><p id="planDescription">Marque cada dia quando concluir a leitura e a atividade indicada.</p></div><div class="compact-progress"><strong id="planPercent">0%</strong><span>do plano</span></div></div>
           <div id="studyPlan" class="plan-grid"></div>
         </section>
 
         <section id="page-resumos" class="page">
-          <div class="section-intro"><div><p class="eyebrow blue">Conteúdo essencial</p><h2>Resumos por unidade</h2><p>Leia entendendo as relações entre os conceitos, não apenas decorando definições.</p></div></div>
+          <div class="section-intro summary-intro"><div><p class="eyebrow blue">Conteúdo aprofundado</p><h2 id="summaryTitle">Resumos por unidade</h2><p id="summaryDescription">Leia entendendo as relações entre os conceitos, não apenas decorando definições.</p></div><div class="summary-search"><label class="sr-only" for="contentSearch">Pesquisar nos resumos</label><input id="contentSearch" type="search" placeholder="Pesquisar assunto..."></div></div>
           <div id="summaryList" class="summary-list"></div>
         </section>
 
@@ -177,6 +186,12 @@
           <p id="flashMastery" class="center muted small"></p>
         </section>
 
+        <section id="page-pratica" class="page">
+          <div class="section-intro"><div><p class="eyebrow blue">Aprender fazendo</p><h2 id="practiceTitle">Atividades práticas</h2><p id="practiceDescription">Resolva primeiro e só depois abra a resposta comentada.</p></div><div class="compact-progress"><strong id="practiceCounter">0/0</strong><span>atividades</span></div></div>
+          <div id="practiceIntro" class="practice-intro panel"></div>
+          <div id="practiceList" class="practice-list"></div>
+        </section>
+
         <section id="page-simulado" class="page">
           <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p>São 20 questões sorteadas. Ao finalizar, você verá a explicação de cada resposta.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>respondidas</span></div></div>
           <div id="quizStart" class="quiz-start panel">
@@ -188,15 +203,15 @@
         </section>
 
         <section id="page-videos" class="page">
-          <div class="section-intro"><div><p class="eyebrow blue">Aprenda por outros formatos</p><h2>Videoaulas recomendadas</h2><p>Os links abrem buscas direcionadas no YouTube para cada tema do plano.</p></div></div>
+          <div class="section-intro"><div><p class="eyebrow blue">Aprenda por outros formatos</p><h2>Videoaulas recomendadas</h2><p id="videoDescription">Seleção organizada por assunto para complementar os resumos e a prática.</p></div></div>
           <div id="videoGrid" class="video-grid"></div>
         </section>
 
         <section id="page-anotacoes" class="page">
           <div class="section-intro"><div><p class="eyebrow blue">Seu caderno</p><h2>Anotações e dúvidas</h2><p>Registre conceitos importantes, exemplos da aula e pontos que precisa revisar.</p></div><span id="notesStatus" class="save-status">Tudo salvo</span></div>
           <div class="notes-layout">
-            <div class="notes-editor panel"><label for="notesArea">Minhas anotações</label><textarea id="notesArea" placeholder="Exemplo: Equidade considera as necessidades diferentes para produzir oportunidades mais justas..."></textarea><p class="small muted">Salvamento automático após você parar de digitar.</p></div>
-            <aside class="panel study-tip"><p class="eyebrow blue">Método sugerido</p><h3>Anotação em 3 passos</h3><ol><li>Escreva o conceito com suas palavras.</li><li>Dê um exemplo do contexto escolar.</li><li>Crie uma pergunta que poderia cair na prova.</li></ol></aside>
+            <div class="notes-editor panel"><label for="notesArea">Minhas anotações</label><textarea id="notesArea" placeholder="Registre aqui os pontos mais importantes..."></textarea><p class="small muted">Salvamento automático após você parar de digitar.</p></div>
+            <aside class="panel study-tip"><p class="eyebrow blue">Método sugerido</p><h3>Anotação em 3 passos</h3><ol id="studyTipList"></ol></aside>
           </div>
         </section>
       </main>
@@ -226,6 +241,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/config.js"></script>
   <script src="assets/content.js"></script>
+  <script src="assets/ethics-content.js"></script>
+  <script src="assets/database-content.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

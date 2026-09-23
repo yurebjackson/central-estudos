@@ -1,25 +1,27 @@
-# Central de Estudos v3
+# Central de Estudos v4
 
 Site estático para GitHub Pages com autenticação e sincronização pelo Supabase.
 
 ## O que já está pronto
 
 - Cadastro, login, recuperação de senha e encerramento de sessão.
-- Progresso do plano de 14 dias salvo por usuário.
+- Duas disciplinas independentes: Ética e Cidadania e Banco de Dados Relacional.
+- Progresso de cada plano de 14 dias salvo por usuário e por disciplina.
 - Anotações com salvamento automático.
-- Simulados de 20 questões sorteadas de um banco com 30 questões.
+- Simulados de 20 questões sorteadas, com bancos de questões separados.
 - Histórico e melhor resultado dos simulados.
-- 28 flashcards, resumos, Pomodoro e buscas de videoaulas.
+- 72 flashcards, 23 módulos aprofundados, laboratório prático, Pomodoro e videoaulas.
 - Layout responsivo para computador e celular.
 
 ## Publicar no GitHub Pages
 
 1. Extraia o ZIP no computador.
 2. Abra o repositório que você já criou no GitHub.
-3. Apague ou substitua os arquivos da versão anterior.
-4. Envie `index.html`, a pasta `assets`, `.nojekyll`, `README.md` e `supabase_setup.sql` para a raiz do repositório.
-5. Confirme as alterações no botão **Commit changes**.
-6. Aguarde de 1 a 5 minutos e abra o endereço do GitHub Pages.
+3. Antes de substituir o site, execute `supabase_migration_v4.sql` no SQL Editor do Supabase.
+4. Apague ou substitua os arquivos da versão anterior.
+5. Envie `index.html`, a pasta `assets`, `.nojekyll`, `README.md`, `supabase_setup.sql` e `supabase_migration_v4.sql` para a raiz do repositório.
+6. Confirme as alterações no botão **Commit changes**.
+7. Aguarde de 1 a 5 minutos e abra o endereço do GitHub Pages.
 
 O arquivo principal precisa continuar com o nome `index.html` e a pasta `assets` deve permanecer ao lado dele.
 
@@ -36,15 +38,21 @@ Esta etapa permite que o link de confirmação de e-mail e o link para recuperar
 
 Não use a URL do Supabase nesse campo. Use a URL da página publicada no GitHub.
 
-## Banco de dados
+## Atualização do banco de dados
 
-O sistema espera estas tabelas:
+Se a versão anterior já está funcionando, abra o arquivo `supabase_migration_v4.sql`, copie todo o conteúdo e execute uma vez em **Supabase → SQL Editor → New query → Run**. A migração preserva o progresso, as anotações e os simulados existentes e os associa à disciplina de Ética.
+
+Depois da execução, as tabelas terão a coluna `subject`, que mantém os dados de cada disciplina separados.
+
+## Instalação nova do banco de dados
+
+O sistema utiliza estas tabelas:
 
 - `study_progress`
 - `study_notes`
 - `quiz_results`
 
-Se o SQL passado anteriormente já foi executado com sucesso e essas três tabelas aparecem no **Table Editor**, não é necessário criar tudo novamente. O arquivo `supabase_setup.sql` acompanha o projeto como referência e também adiciona as permissões mínimas para usuários autenticados.
+Em uma instalação nova, execute `supabase_setup.sql`. Em uma instalação que já usava a versão 3, execute somente `supabase_migration_v4.sql`.
 
 ## Teste recomendado
 
@@ -52,13 +60,13 @@ Se o SQL passado anteriormente já foi executado com sucesso e essas três tabel
 2. Crie uma conta com um e-mail que você consiga abrir.
 3. Confirme o cadastro pelo e-mail, se a confirmação estiver habilitada.
 4. Entre no site.
-5. Marque o Dia 1 como concluído e escreva uma anotação.
-6. Saia da conta, entre novamente e confira se os dados continuam lá.
-7. Abra a mesma conta no celular para confirmar a sincronização.
+5. Marque o Dia 1 de Ética e escreva uma anotação.
+6. Troque para Banco de Dados e confirme que o progresso e as anotações começam separados.
+7. Saia da conta, entre novamente e confira se os dados continuam lá.
+8. Abra a mesma conta no celular para confirmar a sincronização.
 
 ## Segurança
 
 O arquivo `assets/config.js` contém somente a chave `sb_publishable_`, própria para uso público no navegador. A segurança dos dados é garantida pelas políticas RLS do banco.
 
 Nunca coloque no projeto uma chave que comece com `sb_secret_`, nem uma chave `service_role`.
-

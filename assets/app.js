@@ -18,6 +18,7 @@
   const state = {
     mode: "login",
     session: null,
+    subject: localStorage.getItem("central-estudos-subject") || "etica",
     completedDays: new Set(),
     results: [],
     flashIndex: 0,
@@ -50,6 +51,7 @@
       [/unable to validate email/i, "Digite um e-mail válido."],
       [/failed to fetch|network/i, "Não foi possível conectar. Verifique sua internet."],
       [/row-level security|permission denied/i, "O banco bloqueou a operação. Confira o SQL e as políticas RLS."],
+      [/column.*subject|subject.*column|schema cache.*subject/i, "Execute o arquivo supabase_migration_v4.sql no SQL Editor antes de usar as duas disciplinas."],
       [/rate limit/i, "Muitas tentativas. Aguarde um pouco e tente novamente."]
     ];
     const found = translations.find(([pattern]) => pattern.test(message));
@@ -200,9 +202,9 @@
     setSync("pending", "Carregando...");
     try {
       const [progressResponse, notesResponse, resultsResponse] = await Promise.all([
-        db.from("study_progress").select("day, completed"),
-        db.from("study_notes").select("content").maybeSingle(),
-        db.from("quiz_results").select("id, score, total, percentage, created_at").order("created_at", { ascending: false }).limit(20)
+        db.from("study_progress").select("day, completed").eq("subject", state.subject),
+        db.from("study_notes").select("content").eq("subject", state.subject).maybeSingle(),
+        db.from("quiz_results").select("id, score, total, percentage, created_at").eq("subject", state.subject).order("created_at", { ascending: false }).limit(20)
       ]);
       const error = progressResponse.error || notesResponse.error || resultsResponse.error;
       if (error) throw error;
@@ -236,10 +238,11 @@
     try {
       const { error } = await db.from("study_progress").upsert({
         user_id: state.session.user.id,
+        subject: state.subject,
         day,
         completed: !wasDone,
         updated_at: new Date().toISOString()
-      }, { onConflict: "user_id,day" });
+      }, { onConflict: "user_id,subject,day" });
       if (error) throw error;
       setSync("ok");
       showToast(wasDone ? `Dia ${day} desmarcado.` : `Dia ${day} concluído. Muito bem!`);
@@ -268,7 +271,7 @@
 
   function renderSummaries() {
     qs("#summaryList").innerHTML = content.summaries.map((item, index) => `
-      <article class="summary-item ${index === 0 ? "open" : ""}">
+      <article class="summary-item ${index === 0 ? "open" : ""}" data-search="${`${item.title} ${item.subtitle}`.toLocaleLowerCase("pt-BR")}">
         <button class="summary-toggle" type="button" aria-expanded="${index === 0}">
           <span class="summary-index">${String(index + 1).padStart(2, "0")}</span>
           <span><strong>${item.title}</strong><br><small>${item.subtitle}</small></span>
@@ -279,14 +282,14 @@
   }
 
   function loadKnownCards() {
-    const key = `central-estudos-known-${state.session?.user?.id || "guest"}`;
+    const key = `central-estudos-known-${state.session?.user?.id || "guest"}-${state.subject}`;
     try { state.knownCards = new Set(JSON.parse(localStorage.getItem(key) || "[]")); }
     catch { state.knownCards = new Set(); }
     renderFlashcard();
   }
 
   function saveKnownCards() {
-    const key = `central-estudos-known-${state.session.user.id}`;
+    const key = `central-estudos-known-${state.session.user.id}-${state.subject}`;
     localStorage.setItem(key, JSON.stringify([...state.knownCards]));
   }
 
@@ -321,8 +324,85 @@
     qs("#videoGrid").innerHTML = content.videos.map((item, index) => `
       <article class="video-card">
         <div class="video-cover" style="filter:hue-rotate(${index * 9}deg)"><span>▶</span></div>
-        <div class="video-content"><h3>${item.title}</h3><p>${item.description}</p><a class="video-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}" target="_blank" rel="noopener">Pesquisar videoaulas ↗</a></div>
+        <div class="video-content"><h3>${item.title}</h3><span class="video-channel">${item.channel || "YouTube"}</span><p>${item.description}</p><a class="video-link" href="${item.url || `https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}`}" target="_blank" rel="noopener">${item.url ? "Assistir videoaula" : "Pesquisar videoaulas"} ↗</a></div>
       </article>`).join("");
+  }
+
+  function renderPractice() {
+    qs("#practiceIntro").innerHTML = content.practiceIntro;
+    qs("#practiceCounter").textContent = `0/${content.practice.length}`;
+    qs("#practiceList").innerHTML = content.practice.map((item, index) => `
+      <article class="practice-card">
+        <button class="practice-question" type="button" aria-expanded="false">
+          <span class="practice-number">${index + 1}</span>
+          <span><strong>${item.title}</strong><br><small>${item.prompt}</small></span>
+          <span class="practice-chevron">⌄</span>
+        </button>
+        <div class="practice-answer">${item.answer}</div>
+      </article>`).join("");
+  }
+
+  function applySubjectContent(subject) {
+    const validSubject = content.subjects[subject] ? subject : "etica";
+    state.subject = validSubject;
+    Object.assign(content, content.subjects[validSubject]);
+    localStorage.setItem("central-estudos-subject", validSubject);
+    document.body.dataset.subject = validSubject;
+    qs("#subjectSelect").value = validSubject;
+  }
+
+  function resetQuizView() {
+    state.quizQuestions = [];
+    qs("#quizStart").classList.remove("hidden");
+    qs("#quizForm").classList.add("hidden");
+    qs("#quizForm").innerHTML = "";
+    qs("#quizActions").classList.add("hidden");
+    qs("#quizResult").classList.add("hidden");
+    qs("#quizResult").innerHTML = "";
+    qs("#quizProgress").textContent = "0/20";
+  }
+
+  function renderSubjectUI() {
+    qs("#heroTitle").textContent = content.title;
+    qs("#heroDescription").textContent = content.description;
+    qs("#planTitle").textContent = content.planTitle;
+    qs("#planDescription").textContent = content.planDescription;
+    qs("#summaryTitle").textContent = content.summaryTitle;
+    qs("#summaryDescription").textContent = content.summaryDescription;
+    qs("#videoDescription").textContent = content.videoDescription;
+    qs("#practiceTitle").textContent = content.practiceTitle;
+    qs("#practiceDescription").textContent = content.practiceDescription;
+    qs("#notesArea").placeholder = content.notePlaceholder;
+    qs("#studyTipList").innerHTML = content.studyTips.map(tip => `<li>${tip}</li>`).join("");
+    qs("#contentSearch").value = "";
+    renderProgress();
+    renderSummaries();
+    renderVideos();
+    renderPractice();
+    renderFlashcard();
+    renderResults();
+    resetQuizView();
+  }
+
+  async function switchSubject(subject) {
+    clearTimeout(state.notesHandle);
+    state.completedDays = new Set();
+    state.results = [];
+    state.flashIndex = 0;
+    state.flashFlipped = false;
+    qs("#notesArea").value = "";
+    applySubjectContent(subject);
+    loadKnownCards();
+    renderSubjectUI();
+    if (state.session) await loadRemoteData();
+    showToast(`Disciplina alterada para ${content.shortTitle}.`);
+  }
+
+  function filterSummaries() {
+    const term = qs("#contentSearch").value.trim().toLocaleLowerCase("pt-BR");
+    qsa(".summary-item").forEach(item => {
+      item.classList.toggle("hidden", term && !item.textContent.toLocaleLowerCase("pt-BR").includes(term));
+    });
   }
 
   function sampleQuestions() {
@@ -381,6 +461,7 @@
     try {
       const { data, error } = await db.from("quiz_results").insert({
         user_id: state.session.user.id,
+        subject: state.subject,
         score,
         total: state.quizQuestions.length,
         percentage
@@ -422,9 +503,10 @@
     try {
       const { error } = await db.from("study_notes").upsert({
         user_id: state.session.user.id,
+        subject: state.subject,
         content: qs("#notesArea").value,
         updated_at: new Date().toISOString()
-      }, { onConflict: "user_id" });
+      }, { onConflict: "user_id,subject" });
       if (error) throw error;
       qs("#notesStatus").textContent = "Tudo salvo";
       setSync("ok");
@@ -440,6 +522,7 @@
     plano: ["Sua rotina", "Plano de estudo"],
     resumos: ["Conteúdo", "Resumos da disciplina"],
     flashcards: ["Revisão ativa", "Flashcards"],
+    pratica: ["Aprender fazendo", "Prática"],
     simulado: ["Avaliação", "Simulado"],
     videos: ["Aprofundamento", "Videoaulas"],
     anotacoes: ["Seu material", "Anotações"]
@@ -505,6 +588,7 @@
       await db.auth.signOut({ scope: "local" });
       showAuth();
     });
+    qs("#subjectSelect").addEventListener("change", event => switchSubject(event.target.value));
     qs("#mainNav").addEventListener("click", event => {
       const button = event.target.closest("[data-page]");
       if (button) navigate(button.dataset.page);
@@ -526,6 +610,15 @@
       item.classList.toggle("open");
       button.setAttribute("aria-expanded", item.classList.contains("open"));
     });
+    qs("#contentSearch").addEventListener("input", filterSummaries);
+    qs("#practiceList").addEventListener("click", event => {
+      const button = event.target.closest(".practice-question");
+      if (!button) return;
+      const card = button.closest(".practice-card");
+      card.classList.toggle("open");
+      button.setAttribute("aria-expanded", card.classList.contains("open"));
+      qs("#practiceCounter").textContent = `${qsa(".practice-card.open").length}/${content.practice.length}`;
+    });
     qs("#flashCard").addEventListener("click", () => { state.flashFlipped = !state.flashFlipped; renderFlashcard(); });
     qs("#flashPrev").addEventListener("click", () => moveFlash(-1));
     qs("#flashNext").addEventListener("click", () => moveFlash(1));
@@ -545,11 +638,8 @@
   }
 
   async function init() {
-    renderPlan();
-    renderSummaries();
-    renderVideos();
-    renderFlashcard();
-    renderProgress();
+    applySubjectContent(state.subject);
+    renderSubjectUI();
     formatTimer();
     bindEvents();
 
