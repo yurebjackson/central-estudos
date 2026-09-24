@@ -1,4 +1,4 @@
-# Central de Estudos v4
+# Central de Estudos v5
 
 Site estático para GitHub Pages com autenticação e sincronização pelo Supabase.
 
@@ -10,14 +10,30 @@ Site estático para GitHub Pages com autenticação e sincronização pelo Supab
 - Anotações com salvamento automático.
 - Simulados de 20 questões sorteadas, com bancos de questões separados.
 - Histórico e melhor resultado dos simulados.
-- 72 flashcards, 23 módulos aprofundados, laboratório prático, Pomodoro e videoaulas.
+- Ética e Cidadania organizada conforme as 12 unidades exibidas no ambiente acadêmico.
+- 96 flashcards, 25 módulos aprofundados, 100 questões comentadas, 30 atividades práticas, Pomodoro e videoaulas.
 - Layout responsivo para computador e celular.
+
+## Atualização da versão 4 para a versão 5
+
+Esta atualização amplia e reorganiza o conteúdo da disciplina de Cidadania, Ética, Educação, Negociação e Sustentabilidade. Ela não altera a estrutura das tabelas do Supabase.
+
+Se a versão 4 já está funcionando, basta substituir os arquivos do site no GitHub. Não execute novamente a migração do banco e não apague seus dados.
+
+Na disciplina de Ética e Cidadania, a versão 5 contém:
+
+- 12 unidades oficiais e aprofundadas;
+- plano de estudo de 14 dias reorganizado;
+- 60 flashcards;
+- 60 questões comentadas para sorteio nos simulados;
+- 16 situações práticas;
+- 13 tópicos de videoaulas e pesquisas guiadas.
 
 ## Publicar no GitHub Pages
 
 1. Extraia o ZIP no computador.
 2. Abra o repositório que você já criou no GitHub.
-3. Antes de substituir o site, execute `supabase_migration_v4.sql` no SQL Editor do Supabase.
+3. Se ainda estiver na versão 3, execute `supabase_migration_v4.sql` no SQL Editor do Supabase. Se a versão 4 já funciona, pule esta etapa.
 4. Apague ou substitua os arquivos da versão anterior.
 5. Envie `index.html`, a pasta `assets`, `.nojekyll`, `README.md`, `supabase_setup.sql` e `supabase_migration_v4.sql` para a raiz do repositório.
 6. Confirme as alterações no botão **Commit changes**.
