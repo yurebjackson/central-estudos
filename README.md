@@ -1,18 +1,34 @@
-# Central de Estudos v5
+# Central de Estudos v6
 
 Site estático para GitHub Pages com autenticação e sincronização pelo Supabase.
 
 ## O que já está pronto
 
 - Cadastro, login, recuperação de senha e encerramento de sessão.
-- Duas disciplinas independentes: Ética e Cidadania e Banco de Dados Relacional.
+- Duas disciplinas independentes: Ética e Cidadania e Administração de Banco de Dados.
 - Progresso de cada plano de 14 dias salvo por usuário e por disciplina.
 - Anotações com salvamento automático.
 - Simulados de 20 questões sorteadas, com bancos de questões separados.
 - Histórico e melhor resultado dos simulados.
 - Ética e Cidadania organizada conforme as 12 unidades exibidas no ambiente acadêmico.
-- 96 flashcards, 25 módulos aprofundados, 100 questões comentadas, 30 atividades práticas, Pomodoro e videoaulas.
+- Banco de Dados organizado conforme as 12 unidades exibidas no ambiente acadêmico.
+- 120 flashcards, 24 módulos aprofundados, 120 questões comentadas, 32 atividades práticas, Pomodoro e 26 tópicos de videoaulas.
 - Layout responsivo para computador e celular.
+
+## Atualização da versão 5 para a versão 6
+
+Esta atualização reorganiza Banco de Dados para acompanhar as 12 unidades oficiais: funções dos SGBDs, arquiteturas centralizadas e distribuídas, manutenção, responsabilidades do DBA, performance, inicialização e desativação, espaço, usuários, privilégios, backup, automação e segurança.
+
+Na disciplina de Banco de Dados, a versão 6 contém:
+
+- 12 unidades oficiais e aprofundadas;
+- plano de estudo de 14 dias reorganizado;
+- 60 flashcards;
+- 60 questões comentadas para sorteio nos simulados;
+- 16 situações práticas;
+- 13 tópicos de videoaulas e pesquisas guiadas.
+
+Não é necessário executar SQL novamente para atualizar da versão 5 para a versão 6. Basta substituir os arquivos no GitHub.
 
 ## Atualização da versão 4 para a versão 5
 
