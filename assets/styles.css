@@ -210,19 +210,34 @@ input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px r
 .quiz-start p { color: var(--muted); }
 .quiz-form { display: grid; gap: 16px; }
 .question-card { padding: 23px; border: 1px solid var(--line); border-radius: 16px; background: white; }
+.quiz-single-card { max-width: 820px; width: 100%; margin: 18px auto 0; box-shadow: 0 12px 32px rgba(15,47,95,.07); }
+.question-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .question-number { color: var(--blue); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+.difficulty-badge { padding: 5px 9px; border-radius: 999px; color: #6a4d16; background: #fff3d6; font-size: .7rem; font-weight: 800; }
 .question-text { margin: 8px 0 17px; font-weight: 700; line-height: 1.5; }
 .options { display: grid; gap: 8px; }
 .option { display: flex; gap: 10px; align-items: flex-start; padding: 12px 13px; border: 1px solid #dbe3ed; border-radius: 10px; color: #42516a; background: #fbfcfe; cursor: pointer; }
 .option:hover { border-color: #b9cae3; }
+.option.selected { border-color: var(--blue); background: var(--blue-soft); box-shadow: 0 0 0 1px var(--blue); }
 .option input { width: auto; height: auto; margin-top: 4px; accent-color: var(--blue); }
 .question-card.correct { border-color: #9bd3c1; background: #f8fcfb; }
 .question-card.wrong { border-color: #f0b9be; background: #fffafb; }
 .explanation { margin: 15px 0 0; padding-top: 13px; border-top: 1px solid var(--line); color: #4f5e74; font-size: .88rem; }
-.quiz-actions { position: sticky; bottom: 15px; display: flex; justify-content: flex-end; padding: 15px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.94); box-shadow: var(--shadow); }
-.quiz-result { margin-bottom: 25px; padding: 28px; border-radius: 18px; color: white; background: linear-gradient(135deg, var(--navy), var(--blue)); text-align: center; }
-.quiz-result strong { display: block; margin: 8px 0; font-family: "Manrope"; font-size: 2.7rem; }
-.quiz-result .button { margin-top: 10px; }
+.quiz-actions { position: sticky; bottom: 15px; display: flex; justify-content: space-between; gap: 12px; max-width: 820px; margin: 16px auto 0; padding: 15px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.96); box-shadow: var(--shadow); }
+.quiz-actions .button:disabled { opacity: .45; cursor: not-allowed; }
+.quiz-result { margin-bottom: 25px; }
+.quiz-score-card { padding: 30px; border-radius: 18px; color: white; background: linear-gradient(135deg, var(--navy), var(--blue)); text-align: center; }
+.quiz-score-card > strong { display: block; margin: 8px 0; font-family: "Manrope"; font-size: 2.7rem; }
+.quiz-score-card .button { margin-top: 10px; }
+.quiz-review { display: grid; gap: 14px; margin-top: 28px; }
+.review-heading { margin-bottom: 3px; }
+.review-card { text-align: left; }
+.answer-status { padding: 5px 10px; border-radius: 999px; font-size: .72rem; font-weight: 800; }
+.answer-status.success { color: #146448; background: #dff5ed; }
+.answer-status.error { color: #9e2f39; background: #fde7e9; }
+.review-answer { margin: 8px 0; color: #526178; line-height: 1.5; }
+.review-answer span { color: var(--ink); font-weight: 800; }
+.correct-answer { color: #197250; }
 
 .video-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 17px; }
 .video-card { overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: white; box-shadow: 0 8px 20px rgba(15,47,95,.045); }
@@ -311,7 +326,8 @@ body[data-subject="banco"] .video-cover { background: linear-gradient(140deg, #2
   .question-card { padding: 18px; }
   .practice-question { grid-template-columns: 38px 1fr auto; padding: 14px; }
   .practice-answer { padding: 0 16px 18px; }
-  .quiz-actions { justify-content: stretch; }
+  .question-meta { align-items: flex-start; flex-direction: column; }
+  .quiz-actions { flex-direction: column-reverse; justify-content: stretch; }
   .quiz-actions .button { width: 100%; }
   .account-popover { right: 15px; }
 }

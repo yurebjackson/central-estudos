@@ -1,6 +1,22 @@
-# Central de Estudos v6
+# Central de Estudos v8
 
 Site estático para GitHub Pages com autenticação e sincronização pelo Supabase.
+
+## Novo simulado da versão 8
+
+- Uma questão é apresentada por vez.
+- O estudante escolhe uma alternativa e usa **Próxima questão** para avançar.
+- É possível voltar para revisar a questão anterior.
+- Na questão 20, o botão muda para **Ver respostas**.
+- A correção não aparece durante o simulado.
+- No final, o sistema mostra o total de acertos, percentual e explicação de todas as respostas.
+- Cada disciplina possui um novo banco com 36 questões intermediárias e avançadas, baseadas em análise de situações e aplicação dos conceitos.
+
+## Correção da versão 7
+
+O cronômetro Pomodoro agora usa o horário real como referência. A contagem permanece correta ao trocar de aba, minimizar o navegador, deixar a página em segundo plano ou retornar depois de o navegador reduzir a execução dos temporizadores.
+
+Também foram separados corretamente os ciclos de foco de 25 minutos e pausa de 5 minutos. Não é necessário executar SQL para aplicar esta atualização.
 
 ## O que já está pronto
 
@@ -12,7 +28,7 @@ Site estático para GitHub Pages com autenticação e sincronização pelo Supab
 - Histórico e melhor resultado dos simulados.
 - Ética e Cidadania organizada conforme as 12 unidades exibidas no ambiente acadêmico.
 - Banco de Dados organizado conforme as 12 unidades exibidas no ambiente acadêmico.
-- 120 flashcards, 24 módulos aprofundados, 120 questões comentadas, 32 atividades práticas, Pomodoro e 26 tópicos de videoaulas.
+- 120 flashcards, 24 módulos aprofundados, 72 questões intermediárias e avançadas no novo banco de simulados, 32 atividades práticas, Pomodoro e 26 tópicos de videoaulas.
 - Layout responsivo para computador e celular.
 
 ## Atualização da versão 5 para a versão 6

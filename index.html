@@ -193,12 +193,15 @@
         </section>
 
         <section id="page-simulado" class="page">
-          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p>São 20 questões sorteadas. Ao finalizar, você verá a explicação de cada resposta.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>respondidas</span></div></div>
+          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p>São 20 questões de nível intermediário e avançado, apresentadas uma por vez. A correção aparece somente no final.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>questão</span></div></div>
           <div id="quizStart" class="quiz-start panel">
-            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p>Separe cerca de 20 minutos, responda sem consultar e revise os erros no final.</p><button id="startQuiz" class="button primary">Começar simulado</button>
+            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p>Separe cerca de 25 minutos. Escolha uma alternativa e avance; as respostas e seu resultado serão mostrados somente depois da questão 20.</p><button id="startQuiz" class="button primary">Começar simulado</button>
           </div>
           <form id="quizForm" class="quiz-form hidden"></form>
-          <div id="quizActions" class="quiz-actions hidden"><button id="finishQuiz" class="button primary" type="button">Finalizar e corrigir</button></div>
+          <div id="quizActions" class="quiz-actions hidden">
+            <button id="quizPrev" class="button ghost" type="button">← Questão anterior</button>
+            <button id="quizNext" class="button primary" type="button">Próxima questão →</button>
+          </div>
           <div id="quizResult" class="quiz-result hidden"></div>
         </section>
 

@@ -25,8 +25,12 @@
     flashFlipped: false,
     knownCards: new Set(),
     quizQuestions: [],
+    quizIndex: 0,
+    quizAnswers: [],
     timerSeconds: 25 * 60,
+    timerPhase: "focus",
     timerRunning: false,
+    timerEndAt: null,
     timerHandle: null,
     notesHandle: null
   };
@@ -353,6 +357,8 @@
 
   function resetQuizView() {
     state.quizQuestions = [];
+    state.quizIndex = 0;
+    state.quizAnswers = [];
     qs("#quizStart").classList.remove("hidden");
     qs("#quizForm").classList.add("hidden");
     qs("#quizForm").innerHTML = "";
@@ -406,56 +412,111 @@
   }
 
   function sampleQuestions() {
-    return [...content.quiz].sort(() => Math.random() - .5).slice(0, 20);
+    const bank = content.advancedQuiz?.length >= 20 ? content.advancedQuiz : content.quiz;
+    const shuffled = [...bank];
+    for (let index = shuffled.length - 1; index > 0; index--) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+    }
+    return shuffled.slice(0, Math.min(20, shuffled.length));
+  }
+
+  function renderQuizQuestion() {
+    const item = state.quizQuestions[state.quizIndex];
+    if (!item) return;
+
+    const selected = state.quizAnswers[state.quizIndex];
+    const total = state.quizQuestions.length;
+    qs("#quizProgress").textContent = `${state.quizIndex + 1}/${total}`;
+    qs("#quizForm").innerHTML = `
+      <article class="question-card quiz-single-card" data-question="${state.quizIndex}">
+        <div class="question-meta"><span class="question-number">Questão ${state.quizIndex + 1} de ${total}</span><span class="difficulty-badge">Intermediária / avançada</span></div>
+        <p class="question-text">${item.q}</p>
+        <div class="options">${item.o.map((option, optionIndex) => `<label class="option${selected === optionIndex ? " selected" : ""}"><input type="radio" name="currentQuestion" value="${optionIndex}" ${selected === optionIndex ? "checked" : ""}><span><strong>${String.fromCharCode(65 + optionIndex)}.</strong> ${option}</span></label>`).join("")}</div>
+      </article>`;
+
+    qs("#quizPrev").disabled = state.quizIndex === 0;
+    qs("#quizNext").disabled = selected === null || selected === undefined;
+    qs("#quizNext").textContent = state.quizIndex === total - 1 ? "Ver respostas" : "Próxima questão →";
   }
 
   function startQuiz() {
     state.quizQuestions = sampleQuestions();
+    state.quizIndex = 0;
+    state.quizAnswers = Array(state.quizQuestions.length).fill(null);
     qs("#quizStart").classList.add("hidden");
     qs("#quizResult").classList.add("hidden");
+    qs("#quizResult").innerHTML = "";
     qs("#quizForm").classList.remove("hidden");
     qs("#quizActions").classList.remove("hidden");
-    qs("#quizProgress").textContent = "0/20";
-    qs("#quizForm").innerHTML = state.quizQuestions.map((item, index) => `
-      <article class="question-card" data-question="${index}">
-        <span class="question-number">Questão ${index + 1}</span>
-        <p class="question-text">${item.q}</p>
-        <div class="options">${item.o.map((option, optionIndex) => `<label class="option"><input type="radio" name="q${index}" value="${optionIndex}"><span>${option}</span></label>`).join("")}</div>
-      </article>`).join("");
+    renderQuizQuestion();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function updateQuizProgress() {
-    const answered = new Set(qsa('#quizForm input:checked').map(input => input.name)).size;
-    qs("#quizProgress").textContent = `${answered}/20`;
+  function updateQuizAnswer(event) {
+    const input = event.target.closest('input[name="currentQuestion"]');
+    if (!input) return;
+    state.quizAnswers[state.quizIndex] = Number(input.value);
+    qsa(".option", qs("#quizForm")).forEach(option => option.classList.toggle("selected", option.contains(input)));
+    qs("#quizNext").disabled = false;
+  }
+
+  function previousQuizQuestion() {
+    if (state.quizIndex === 0) return;
+    state.quizIndex--;
+    renderQuizQuestion();
+    qs("#quizForm").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function nextQuizQuestion() {
+    const selected = state.quizAnswers[state.quizIndex];
+    if (selected === null || selected === undefined) {
+      showToast("Selecione uma alternativa antes de continuar.", "error");
+      return;
+    }
+
+    if (state.quizIndex === state.quizQuestions.length - 1) {
+      await finishQuiz();
+      return;
+    }
+
+    state.quizIndex++;
+    renderQuizQuestion();
+    qs("#quizForm").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   async function finishQuiz() {
-    const answers = state.quizQuestions.map((_, index) => qs(`input[name="q${index}"]:checked`));
-    const missing = answers.filter(Boolean).length < state.quizQuestions.length;
-    if (missing && !confirm("Você ainda deixou questões sem resposta. Deseja corrigir mesmo assim?")) return;
-
-    let score = 0;
-    state.quizQuestions.forEach((item, index) => {
-      const card = qs(`[data-question="${index}"]`);
-      const selected = answers[index] ? Number(answers[index].value) : -1;
-      const correct = selected === item.a;
-      if (correct) score++;
-      card.classList.add(correct ? "correct" : "wrong");
-      qsa("input", card).forEach(input => { input.disabled = true; });
-      const explanation = document.createElement("p");
-      explanation.className = "explanation";
-      explanation.innerHTML = `<strong>${correct ? "Correto." : `Resposta correta: ${item.o[item.a]}.`}</strong> ${item.e}`;
-      card.appendChild(explanation);
-    });
+    const score = state.quizQuestions.reduce((total, item, index) => total + (state.quizAnswers[index] === item.a ? 1 : 0), 0);
 
     const percentage = Math.round((score / state.quizQuestions.length) * 100);
+    qs("#quizForm").classList.add("hidden");
     qs("#quizActions").classList.add("hidden");
+    qs("#quizProgress").textContent = `${state.quizQuestions.length}/${state.quizQuestions.length}`;
     const result = qs("#quizResult");
     result.classList.remove("hidden");
-    result.innerHTML = `<p class="eyebrow">Resultado do simulado</p><strong>${percentage}%</strong><p>Você acertou ${score} de ${state.quizQuestions.length} questões.</p><button id="retryQuiz" class="button light" type="button">Fazer outro simulado</button>`;
+    result.innerHTML = `
+      <section class="quiz-score-card">
+        <p class="eyebrow">Resultado do simulado</p>
+        <strong>${score}/${state.quizQuestions.length}</strong>
+        <p>Você acertou <b>${score}</b> de <b>${state.quizQuestions.length}</b> questões — ${percentage}% de aproveitamento.</p>
+        <button id="retryQuiz" class="button light" type="button">Fazer outro simulado</button>
+      </section>
+      <section class="quiz-review">
+        <div class="review-heading"><p class="eyebrow blue">Correção comentada</p><h3>Veja onde acertou e o que precisa revisar</h3></div>
+        ${state.quizQuestions.map((item, index) => {
+          const selected = state.quizAnswers[index];
+          const correct = selected === item.a;
+          return `<article class="question-card review-card ${correct ? "correct" : "wrong"}">
+            <div class="question-meta"><span class="question-number">Questão ${index + 1}</span><span class="answer-status ${correct ? "success" : "error"}">${correct ? "Acertou" : "Errou"}</span></div>
+            <p class="question-text">${item.q}</p>
+            <p class="review-answer"><span>Sua resposta:</span> ${selected === null || selected === undefined ? "Não respondida" : `${String.fromCharCode(65 + selected)}. ${item.o[selected]}`}</p>
+            ${correct ? "" : `<p class="review-answer correct-answer"><span>Resposta correta:</span> ${String.fromCharCode(65 + item.a)}. ${item.o[item.a]}</p>`}
+            <p class="explanation"><strong>Explicação:</strong> ${item.e}</p>
+          </article>`;
+        }).join("")}
+      </section>`;
     qs("#retryQuiz").addEventListener("click", startQuiz);
-    result.scrollIntoView({ behavior: "smooth", block: "center" });
+    result.scrollIntoView({ behavior: "smooth", block: "start" });
 
     setSync("pending");
     try {
@@ -544,31 +605,69 @@
     const value = `${min}:${sec}`;
     qs("#focusTimer").textContent = value;
     qs("#miniTimer").textContent = value;
-    qs("#timerStart").textContent = state.timerRunning ? "Pausar" : "Iniciar foco";
+    const startLabel = state.timerPhase === "focus" ? "Iniciar foco" : "Iniciar pausa";
+    qs("#timerStart").textContent = state.timerRunning ? "Pausar" : startLabel;
     qs("#miniTimerToggle").textContent = state.timerRunning ? "Pausar" : "Iniciar";
   }
 
-  function toggleTimer() {
-    state.timerRunning = !state.timerRunning;
+  function finishTimerPhase() {
     clearInterval(state.timerHandle);
-    if (state.timerRunning) {
-      state.timerHandle = setInterval(() => {
-        state.timerSeconds--;
-        if (state.timerSeconds <= 0) {
-          clearInterval(state.timerHandle);
-          state.timerRunning = false;
-          state.timerSeconds = 5 * 60;
-          showToast("Foco concluído. Faça uma pausa de 5 minutos!");
-        }
-        formatTimer();
-      }, 1000);
+    state.timerHandle = null;
+    state.timerRunning = false;
+    state.timerEndAt = null;
+
+    if (state.timerPhase === "focus") {
+      state.timerPhase = "break";
+      state.timerSeconds = 5 * 60;
+      showToast("Foco concluído. Faça uma pausa de 5 minutos!");
+    } else {
+      state.timerPhase = "focus";
+      state.timerSeconds = 25 * 60;
+      showToast("Pausa concluída. Pronto para outro foco?");
     }
     formatTimer();
   }
 
+  function syncTimerFromClock() {
+    if (!state.timerRunning || !state.timerEndAt) return;
+
+    const remaining = Math.max(0, Math.ceil((state.timerEndAt - Date.now()) / 1000));
+    state.timerSeconds = remaining;
+
+    if (remaining === 0) {
+      finishTimerPhase();
+      return;
+    }
+
+    formatTimer();
+  }
+
+  function toggleTimer() {
+    if (state.timerRunning) {
+      syncTimerFromClock();
+      if (!state.timerRunning) return;
+
+      clearInterval(state.timerHandle);
+      state.timerHandle = null;
+      state.timerRunning = false;
+      state.timerEndAt = null;
+      formatTimer();
+      return;
+    }
+
+    state.timerRunning = true;
+    state.timerEndAt = Date.now() + state.timerSeconds * 1000;
+    clearInterval(state.timerHandle);
+    state.timerHandle = setInterval(syncTimerFromClock, 1000);
+    syncTimerFromClock();
+  }
+
   function resetTimer() {
     clearInterval(state.timerHandle);
+    state.timerHandle = null;
     state.timerRunning = false;
+    state.timerEndAt = null;
+    state.timerPhase = "focus";
     state.timerSeconds = 25 * 60;
     formatTimer();
   }
@@ -629,12 +728,18 @@
       renderFlashcard();
     });
     qs("#startQuiz").addEventListener("click", startQuiz);
-    qs("#quizForm").addEventListener("change", updateQuizProgress);
-    qs("#finishQuiz").addEventListener("click", finishQuiz);
+    qs("#quizForm").addEventListener("change", updateQuizAnswer);
+    qs("#quizPrev").addEventListener("click", previousQuizQuestion);
+    qs("#quizNext").addEventListener("click", nextQuizQuestion);
     qs("#notesArea").addEventListener("input", scheduleNotesSave);
     qs("#timerStart").addEventListener("click", toggleTimer);
     qs("#miniTimerToggle").addEventListener("click", toggleTimer);
     qs("#timerReset").addEventListener("click", resetTimer);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) syncTimerFromClock();
+    });
+    window.addEventListener("focus", syncTimerFromClock);
+    window.addEventListener("pageshow", syncTimerFromClock);
   }
 
   async function init() {
