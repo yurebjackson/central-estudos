@@ -411,14 +411,36 @@
     });
   }
 
-  function sampleQuestions() {
-    const bank = content.advancedQuiz?.length >= 20 ? content.advancedQuiz : content.quiz;
-    const shuffled = [...bank];
+  function shuffleItems(items) {
+    const shuffled = [...items];
     for (let index = shuffled.length - 1; index > 0; index--) {
       const randomIndex = Math.floor(Math.random() * (index + 1));
       [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
     }
-    return shuffled.slice(0, Math.min(20, shuffled.length));
+    return shuffled;
+  }
+
+  function shuffleQuestionOptions(question, correctPosition) {
+    const correctOption = question.o[question.a];
+    const distractors = shuffleItems(question.o.filter((_, index) => index !== question.a));
+    const options = [...distractors];
+    options.splice(correctPosition, 0, correctOption);
+
+    return {
+      ...question,
+      o: options,
+      a: correctPosition
+    };
+  }
+
+  function sampleQuestions() {
+    const bank = content.advancedQuiz?.length >= 20 ? content.advancedQuiz : content.quiz;
+    const selected = shuffleItems(bank).slice(0, Math.min(20, bank.length));
+
+    // Distribui as respostas corretas de forma equilibrada entre A, B, C e D.
+    // Em um simulado de 20 questões, cada letra aparece exatamente 5 vezes.
+    const correctPositions = shuffleItems(selected.map((_, index) => index % 4));
+    return selected.map((question, index) => shuffleQuestionOptions(question, correctPositions[index]));
   }
 
   function renderQuizQuestion() {

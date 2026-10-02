@@ -1,4 +1,12 @@
-# Central de Estudos v8
+# Central de Estudos v9
+
+## Alternativas embaralhadas na versão 9
+
+- As alternativas são reorganizadas a cada novo simulado.
+- As respostas corretas ficam equilibradas entre **A, B, C e D**.
+- Em cada simulado de 20 questões, há exatamente **5 respostas corretas em cada letra**.
+- Os distratores também mudam de posição, evitando padrões previsíveis.
+- A correção e as explicações continuam apontando a alternativa correta após o embaralhamento.
 
 Site estático para GitHub Pages com autenticação e sincronização pelo Supabase.
 
