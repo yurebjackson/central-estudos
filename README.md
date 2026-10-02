@@ -1,10 +1,18 @@
-# Central de Estudos v9
+# Central de Estudos v10
+
+## Questões originais de Banco de Dados na versão 10
+
+- Foram adicionadas as **64 questões** do material enviado pelo estudante.
+- O banco contém **60 questões objetivas**, com os mesmos enunciados e alternativas, e **4 questões discursivas** com resolução sugerida.
+- É possível fazer um simulado aleatório com 20 questões ou revisar as 60 objetivas em sequência.
+- As alternativas mantêm o texto original, mas mudam de posição a cada tentativa para evitar padrões no gabarito.
+- Nas questões objetivas de Banco de Dados, as respostas corretas ficam equilibradas entre A, B, C, D e E.
 
 ## Alternativas embaralhadas na versão 9
 
 - As alternativas são reorganizadas a cada novo simulado.
-- As respostas corretas ficam equilibradas entre **A, B, C e D**.
-- Em cada simulado de 20 questões, há exatamente **5 respostas corretas em cada letra**.
+- As respostas corretas ficam equilibradas entre todas as letras disponíveis.
+- Em 20 questões, bancos com quatro alternativas recebem 5 respostas em cada letra; bancos com cinco alternativas recebem 4 respostas em cada letra.
 - Os distratores também mudam de posição, evitando padrões previsíveis.
 - A correção e as explicações continuam apontando a alternativa correta após o embaralhamento.
 

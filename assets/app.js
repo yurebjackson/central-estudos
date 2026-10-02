@@ -5,6 +5,9 @@
   const content = window.STUDY_CONTENT;
   const qs = (selector, root = document) => root.querySelector(selector);
   const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+  })[character]);
 
   if (!window.supabase || !config?.SUPABASE_URL || !config?.SUPABASE_PUBLISHABLE_KEY) {
     document.body.innerHTML = '<main style="padding:40px;font-family:Arial"><h1>Configuração incompleta</h1><p>Verifique a conexão com o Supabase e tente novamente.</p></main>';
@@ -27,6 +30,7 @@
     quizQuestions: [],
     quizIndex: 0,
     quizAnswers: [],
+    quizUseAll: false,
     timerSeconds: 25 * 60,
     timerPhase: "focus",
     timerRunning: false,
@@ -349,6 +353,8 @@
   function applySubjectContent(subject) {
     const validSubject = content.subjects[subject] ? subject : "etica";
     state.subject = validSubject;
+    delete content.originalQuestionBank;
+    delete content.originalWrittenQuestions;
     Object.assign(content, content.subjects[validSubject]);
     localStorage.setItem("central-estudos-subject", validSubject);
     document.body.dataset.subject = validSubject;
@@ -359,6 +365,7 @@
     state.quizQuestions = [];
     state.quizIndex = 0;
     state.quizAnswers = [];
+    state.quizUseAll = false;
     qs("#quizStart").classList.remove("hidden");
     qs("#quizForm").classList.add("hidden");
     qs("#quizForm").innerHTML = "";
@@ -378,6 +385,15 @@
     qs("#videoDescription").textContent = content.videoDescription;
     qs("#practiceTitle").textContent = content.practiceTitle;
     qs("#practiceDescription").textContent = content.practiceDescription;
+    const hasOriginalBank = state.subject === "banco" && Array.isArray(content.originalQuestionBank);
+    qs("#startAllQuiz").classList.toggle("hidden", !hasOriginalBank);
+    qs("#quizBankInfo").classList.toggle("hidden", !hasOriginalBank);
+    qs("#quizBankInfo").textContent = hasOriginalBank
+      ? `${content.originalQuestionBank.length} questões objetivas e ${content.originalWrittenQuestions?.length || 0} discursivas recuperadas do material que você enviou.`
+      : "";
+    qs("#quizDescription").textContent = hasOriginalBank
+      ? "Escolha um simulado de 20 questões ou revise todas as questões objetivas enviadas. A correção aparece somente no final."
+      : "São 20 questões apresentadas uma por vez. A correção aparece somente no final.";
     qs("#notesArea").placeholder = content.notePlaceholder;
     qs("#studyTipList").innerHTML = content.studyTips.map(tip => `<li>${tip}</li>`).join("");
     qs("#contentSearch").value = "";
@@ -433,13 +449,15 @@
     };
   }
 
-  function sampleQuestions() {
-    const bank = content.advancedQuiz?.length >= 20 ? content.advancedQuiz : content.quiz;
-    const selected = shuffleItems(bank).slice(0, Math.min(20, bank.length));
+  function sampleQuestions(useAll = false) {
+    const originalBank = state.subject === "banco" ? content.originalQuestionBank : null;
+    const bank = useAll && originalBank?.length ? originalBank : content.advancedQuiz?.length >= 20 ? content.advancedQuiz : content.quiz;
+    const limit = useAll && originalBank?.length ? bank.length : Math.min(20, bank.length);
+    const selected = shuffleItems(bank).slice(0, limit);
 
-    // Distribui as respostas corretas de forma equilibrada entre A, B, C e D.
-    // Em um simulado de 20 questões, cada letra aparece exatamente 5 vezes.
-    const correctPositions = shuffleItems(selected.map((_, index) => index % 4));
+    // Equilibra o gabarito entre todas as letras disponíveis (A–D ou A–E).
+    const optionCount = selected[0]?.o.length || 4;
+    const correctPositions = shuffleItems(selected.map((_, index) => index % optionCount));
     return selected.map((question, index) => shuffleQuestionOptions(question, correctPositions[index]));
   }
 
@@ -452,9 +470,9 @@
     qs("#quizProgress").textContent = `${state.quizIndex + 1}/${total}`;
     qs("#quizForm").innerHTML = `
       <article class="question-card quiz-single-card" data-question="${state.quizIndex}">
-        <div class="question-meta"><span class="question-number">Questão ${state.quizIndex + 1} de ${total}</span><span class="difficulty-badge">Intermediária / avançada</span></div>
-        <p class="question-text">${item.q}</p>
-        <div class="options">${item.o.map((option, optionIndex) => `<label class="option${selected === optionIndex ? " selected" : ""}"><input type="radio" name="currentQuestion" value="${optionIndex}" ${selected === optionIndex ? "checked" : ""}><span><strong>${String.fromCharCode(65 + optionIndex)}.</strong> ${option}</span></label>`).join("")}</div>
+        <div class="question-meta"><span class="question-number">Questão ${state.quizIndex + 1} de ${total}</span><span class="difficulty-badge">${item.source === "original" ? `Original nº ${item.originalNumber}` : "Intermediária / avançada"}</span></div>
+        <p class="question-text">${escapeHtml(item.q).replace(/\n/g, "<br>")}</p>
+        <div class="options">${item.o.map((option, optionIndex) => `<label class="option${selected === optionIndex ? " selected" : ""}"><input type="radio" name="currentQuestion" value="${optionIndex}" ${selected === optionIndex ? "checked" : ""}><span><strong>${String.fromCharCode(65 + optionIndex)}.</strong> ${escapeHtml(option).replace(/\n/g, "<br>")}</span></label>`).join("")}</div>
       </article>`;
 
     qs("#quizPrev").disabled = state.quizIndex === 0;
@@ -462,8 +480,9 @@
     qs("#quizNext").textContent = state.quizIndex === total - 1 ? "Ver respostas" : "Próxima questão →";
   }
 
-  function startQuiz() {
-    state.quizQuestions = sampleQuestions();
+  function startQuiz(useAll = false) {
+    state.quizUseAll = Boolean(useAll);
+    state.quizQuestions = sampleQuestions(state.quizUseAll);
     state.quizIndex = 0;
     state.quizAnswers = Array(state.quizQuestions.length).fill(null);
     qs("#quizStart").classList.add("hidden");
@@ -528,16 +547,19 @@
         ${state.quizQuestions.map((item, index) => {
           const selected = state.quizAnswers[index];
           const correct = selected === item.a;
+          const explanation = item.source === "original"
+            ? `Gabarito do material enviado: ${item.o[item.a]}`
+            : item.e;
           return `<article class="question-card review-card ${correct ? "correct" : "wrong"}">
             <div class="question-meta"><span class="question-number">Questão ${index + 1}</span><span class="answer-status ${correct ? "success" : "error"}">${correct ? "Acertou" : "Errou"}</span></div>
-            <p class="question-text">${item.q}</p>
-            <p class="review-answer"><span>Sua resposta:</span> ${selected === null || selected === undefined ? "Não respondida" : `${String.fromCharCode(65 + selected)}. ${item.o[selected]}`}</p>
-            ${correct ? "" : `<p class="review-answer correct-answer"><span>Resposta correta:</span> ${String.fromCharCode(65 + item.a)}. ${item.o[item.a]}</p>`}
-            <p class="explanation"><strong>Explicação:</strong> ${item.e}</p>
+            <p class="question-text">${escapeHtml(item.q).replace(/\n/g, "<br>")}</p>
+            <p class="review-answer"><span>Sua resposta:</span> ${selected === null || selected === undefined ? "Não respondida" : `${String.fromCharCode(65 + selected)}. ${escapeHtml(item.o[selected]).replace(/\n/g, "<br>")}`}</p>
+            ${correct ? "" : `<p class="review-answer correct-answer"><span>Resposta correta:</span> ${String.fromCharCode(65 + item.a)}. ${escapeHtml(item.o[item.a]).replace(/\n/g, "<br>")}</p>`}
+            <p class="explanation"><strong>Explicação:</strong> ${escapeHtml(explanation).replace(/\n/g, "<br>")}</p>
           </article>`;
         }).join("")}
       </section>`;
-    qs("#retryQuiz").addEventListener("click", startQuiz);
+    qs("#retryQuiz").addEventListener("click", () => startQuiz(state.quizUseAll));
     result.scrollIntoView({ behavior: "smooth", block: "start" });
 
     setSync("pending");
@@ -749,7 +771,8 @@
       saveKnownCards();
       renderFlashcard();
     });
-    qs("#startQuiz").addEventListener("click", startQuiz);
+    qs("#startQuiz").addEventListener("click", () => startQuiz(false));
+    qs("#startAllQuiz").addEventListener("click", () => startQuiz(true));
     qs("#quizForm").addEventListener("change", updateQuizAnswer);
     qs("#quizPrev").addEventListener("click", previousQuizQuestion);
     qs("#quizNext").addEventListener("click", nextQuizQuestion);

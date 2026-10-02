@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css?v=10">
 </head>
 <body>
   <noscript>Ative o JavaScript para usar esta central de estudos.</noscript>
@@ -193,9 +193,11 @@
         </section>
 
         <section id="page-simulado" class="page">
-          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p>São 20 questões de nível intermediário e avançado, apresentadas uma por vez. A correção aparece somente no final.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>questão</span></div></div>
+          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p id="quizDescription">São 20 questões apresentadas uma por vez. A correção aparece somente no final.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>questão</span></div></div>
           <div id="quizStart" class="quiz-start panel">
-            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p>Separe cerca de 25 minutos. Escolha uma alternativa e avance; as respostas e seu resultado serão mostrados somente depois da questão 20.</p><button id="startQuiz" class="button primary">Começar simulado</button>
+            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p id="quizStartText">Escolha uma alternativa e avance. As respostas e seu resultado serão mostrados somente no final.</p>
+            <p id="quizBankInfo" class="quiz-bank-info hidden"></p>
+            <div class="quiz-start-actions"><button id="startQuiz" class="button primary">Simulado com 20 questões</button><button id="startAllQuiz" class="button ghost hidden">Revisar todas as 60 objetivas</button></div>
           </div>
           <form id="quizForm" class="quiz-form hidden"></form>
           <div id="quizActions" class="quiz-actions hidden">
@@ -242,10 +244,11 @@
   <div id="accountPopover" class="account-popover hidden"><strong id="accountName"></strong><span id="accountEmail"></span></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/config.js"></script>
-  <script src="assets/content.js"></script>
-  <script src="assets/ethics-content.js"></script>
-  <script src="assets/database-content.js"></script>
-  <script src="assets/app.js"></script>
+  <script src="assets/config.js?v=10"></script>
+  <script src="assets/content.js?v=10"></script>
+  <script src="assets/ethics-content.js?v=10"></script>
+  <script src="assets/database-content.js?v=10"></script>
+  <script src="assets/database-original-questions.js?v=10"></script>
+  <script src="assets/app.js?v=10"></script>
 </body>
 </html>
