@@ -4,12 +4,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#153e75">
-  <meta name="description" content="Central de estudos para Cidadania, Ética, Educação, Negociação e Sustentabilidade.">
+  <meta name="description" content="Central de estudos UNIFSA para Ética e Cidadania e Banco de Dados Relacional.">
   <title>Central de Estudos | UNIFSA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=10">
+  <link rel="stylesheet" href="assets/styles.css?v=11">
+
+  <style>
+    .db-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .db-review-card{background:var(--surface,#fff);border:1px solid var(--border,#dce3ec);border-radius:16px;padding:18px}
+    .db-review-card h3{margin:0 0 10px}
+    .db-review-card ul{margin:10px 0 0;padding-left:20px;line-height:1.65}
+    .db-key{margin:12px 0;padding:12px 14px;border-left:4px solid #2f66d0;background:#f4f7ff;border-radius:10px;line-height:1.55}
+    .db-code{white-space:pre-wrap;font-family:Consolas,monospace;background:#f6f8fb;border:1px solid #e2e8f0;border-radius:10px;padding:12px;overflow:auto}
+    .db-tip{margin-top:12px;padding:12px 14px;border:1px solid #f2d48b;background:#fff9e8;border-radius:10px;line-height:1.55}
+    .db-practice{margin-top:18px}
+    .db-mini-q{padding:16px 0;border-top:1px solid var(--border,#dce3ec)}
+    .db-mini-options{display:grid;gap:8px;margin-top:10px}
+    .db-choice{width:100%;text-align:left;border:1px solid #d7deea;background:#fff;border-radius:10px;padding:11px 12px;cursor:pointer;font:inherit}
+    .db-choice.correct{border-color:#23865b;background:#edf9f3}
+    .db-choice.wrong{border-color:#bf4343;background:#fff1f1}
+    .db-choice:disabled{cursor:default;opacity:1}
+    .db-feedback{margin-top:10px;padding:12px 14px;border-radius:10px;line-height:1.55}
+    .db-feedback.ok{background:#edf9f3;border:1px solid #bfe5d1}
+    .db-feedback.bad{background:#fff1f1;border:1px solid #edc0c0}
+    .db-quiz-card{background:#fff;border:1px solid var(--border,#dce3ec);border-radius:16px;padding:20px}
+    .db-quiz-options{display:grid;gap:10px;margin:16px 0}
+    .db-quiz-explanation{margin-top:14px;padding:14px;border-radius:12px;line-height:1.6}
+    .db-quiz-explanation.ok{background:#edf9f3;border:1px solid #bfe5d1}
+    .db-quiz-explanation.bad{background:#fff1f1;border:1px solid #edc0c0}
+    @media(max-width:800px){.db-review-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
   <noscript>Ative o JavaScript para usar esta central de estudos.</noscript>
@@ -93,6 +119,7 @@
         <button class="nav-item active" data-page="inicio"><span>⌂</span> Início</button>
         <button class="nav-item" data-page="plano"><span>✓</span> Plano de estudo</button>
         <button class="nav-item" data-page="resumos"><span>▤</span> Resumos</button>
+        <button class="nav-item" data-page="revisao-banco"><span>DB</span> Revisão Banco</button>
         <button class="nav-item" data-page="flashcards"><span>◇</span> Flashcards</button>
         <button class="nav-item" data-page="pratica"><span>⌘</span> Prática</button>
         <button class="nav-item" data-page="simulado"><span>◎</span> Simulado</button>
@@ -171,6 +198,129 @@
           <div id="summaryList" class="summary-list"></div>
         </section>
 
+
+        <section id="page-revisao-banco" class="page">
+          <div class="section-intro">
+            <div>
+              <p class="eyebrow blue">Revisão direcionada para a prova final</p>
+              <h2>Banco de Dados Relacional — do zero</h2>
+              <p>Conteúdo organizado no mesmo tipo de raciocínio cobrado na avaliação: conceito, exemplo e armadilha.</p>
+            </div>
+          </div>
+
+          <div class="db-review-grid">
+            <article class="db-review-card">
+              <h3>1. Entidade, atributo, relacionamento e chave</h3>
+              <div class="db-key"><b>Decore:</b> Entidade = coisa • Atributo = característica • Relacionamento = ligação • Chave = identificador.</div>
+              <ul>
+                <li><b>Entidade:</b> ALUNO, PET, PESSOA, LIVRO, EMPREGADO.</li>
+                <li><b>Atributo:</b> nome, idade, CPF, data_nascimento, cargo.</li>
+                <li><b>Relacionamento:</b> “adota”, “cursa”, “alocação”.</li>
+                <li><b>Chave:</b> atributo que identifica o registro sem ambiguidade.</li>
+                <li><b>Chave composta:</b> dois ou mais atributos juntos identificam o registro.</li>
+              </ul>
+              <div class="db-tip"><b>Armadilha:</b> nome e idade podem se repetir. Um atributo descritivo não é automaticamente uma chave.</div>
+            </article>
+
+            <article class="db-review-card">
+              <h3>2. PK e FK</h3>
+              <div class="db-key"><b>PK identifica. FK conecta.</b></div>
+              <ul>
+                <li><b>PRIMARY KEY:</b> identifica unicamente um registro na própria tabela.</li>
+                <li><b>FOREIGN KEY:</b> aponta para a chave de outra tabela.</li>
+                <li>Exemplo: PET(adotante FK) → PESSOA(cpf PK).</li>
+                <li>Exemplo: PET(codigo_tipo_pet FK) → TIPO_PET(codigo PK).</li>
+              </ul>
+            </article>
+
+            <article class="db-review-card">
+              <h3>3. Cardinalidades</h3>
+              <ul>
+                <li><b>1:1:</b> um para um.</li>
+                <li><b>1:N:</b> um registro pode se relacionar com vários do outro lado.</li>
+                <li><b>N:M:</b> muitos para muitos.</li>
+              </ul>
+              <div class="db-tip"><b>N:M:</b> normalmente gera uma tabela associativa contendo as FKs das duas entidades.</div>
+            </article>
+
+            <article class="db-review-card">
+              <h3>4. DER → modelo relacional</h3>
+              <div class="db-code">PESSOA(cpf PK, nome)
+TIPO_PET(codigo PK, descricao)
+PET(codigo PK, nome, data_nascimento,
+    codigo_tipo_pet FK,
+    adotante FK)</div>
+              <p class="muted">A descrição do tipo fica em TIPO_PET. PET guarda a referência. Isso reduz repetição.</p>
+            </article>
+
+            <article class="db-review-card">
+              <h3>5. 1FN, 2FN e 3FN</h3>
+              <div class="db-key"><b>1FN:</b> um valor por campo • <b>2FN:</b> depende da chave inteira • <b>3FN:</b> não depende de outro atributo não-chave.</div>
+              <ul>
+                <li><b>1FN:</b> “9999-1111, 9888-2222” no mesmo campo viola atomicidade.</li>
+                <li><b>2FN:</b> com PK composta, um atributo depender só de parte da chave é dependência parcial.</li>
+                <li><b>3FN:</b> atributo não-chave depender de outro atributo não-chave é dependência transitiva.</li>
+              </ul>
+            </article>
+
+            <article class="db-review-card">
+              <h3>6. Anomalias</h3>
+              <ul>
+                <li><b>Inserção:</b> não consegue cadastrar uma informação sem outra.</li>
+                <li><b>Atualização:</b> o mesmo dado aparece repetido e precisa ser alterado em vários lugares.</li>
+                <li><b>Exclusão:</b> apagar um registro faz outra informação importante desaparecer.</li>
+              </ul>
+            </article>
+
+            <article class="db-review-card">
+              <h3>7. JOINs</h3>
+              <ul>
+                <li><b>INNER JOIN:</b> somente a interseção.</li>
+                <li><b>LEFT JOIN:</b> todos da esquerda + correspondências.</li>
+                <li><b>RIGHT JOIN:</b> todos da direita + correspondências.</li>
+                <li><b>RIGHT JOIN + esquerda IS NULL:</b> somente os exclusivos da direita.</li>
+              </ul>
+            </article>
+
+            <article class="db-review-card">
+              <h3>8. Níveis de abstração</h3>
+              <div class="db-key"><b>Físico = como guarda • Conceitual = como organiza • Externo = o que o usuário enxerga.</b></div>
+              <ul>
+                <li><b>Físico:</b> armazenamento, arquivos, blocos e índices.</li>
+                <li><b>Conceitual:</b> estruturas e relacionamentos do banco.</li>
+                <li><b>Externo:</b> visões específicas para usuários ou grupos.</li>
+              </ul>
+            </article>
+
+            <article class="db-review-card">
+              <h3>9. ORDER BY</h3>
+              <div class="db-code">SELECT *
+FROM emprestimo
+ORDER BY total DESC, numero_emprestimo ASC;</div>
+              <p>Primeiro: <b>total do maior para o menor</b>. Em empate: <b>numero_emprestimo do menor para o maior</b>.</p>
+            </article>
+
+            <article class="db-review-card">
+              <h3>10. Como pensar na prova</h3>
+              <ul>
+                <li>Procure palavras-chave antes de olhar as alternativas.</li>
+                <li>Se falar em “um valor por campo”, pense em 1FN.</li>
+                <li>Se falar em “parte da chave composta”, pense em 2FN.</li>
+                <li>Se um atributo não-chave determina outro, pense em 3FN.</li>
+                <li>Em diagramas de JOIN, identifique primeiro qual área está destacada.</li>
+              </ul>
+            </article>
+          </div>
+
+          <section class="panel db-practice">
+            <div class="panel-head">
+              <div><p class="eyebrow blue">Treino rápido</p><h3>Atividades com explicação imediata</h3></div>
+            </div>
+            <p class="muted">Responda. O sistema mostra na hora se está certo ou errado e explica o motivo.</p>
+            <div id="dbQuickPractice"></div>
+          </section>
+        </section>
+
         <section id="page-flashcards" class="page">
           <div class="section-intro"><div><p class="eyebrow blue">Memorização ativa</p><h2>Flashcards</h2><p>Tente responder mentalmente antes de virar o cartão.</p></div><div class="compact-progress"><strong id="flashCounter">1/1</strong><span>cartão</span></div></div>
           <div class="flash-shell">
@@ -193,9 +343,9 @@
         </section>
 
         <section id="page-simulado" class="page">
-          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p id="quizDescription">São 20 questões apresentadas uma por vez. A correção aparece somente no final.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>questão</span></div></div>
+          <div class="section-intro"><div><p class="eyebrow blue">Teste seus conhecimentos</p><h2>Simulado da disciplina</h2><p id="quizDescription">São 20 questões apresentadas uma por vez. Em Banco de Dados, a correção e a explicação aparecem imediatamente após cada resposta.</p></div><div class="compact-progress"><strong id="quizProgress">0/20</strong><span>questão</span></div></div>
           <div id="quizStart" class="quiz-start panel">
-            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p id="quizStartText">Escolha uma alternativa e avance. As respostas e seu resultado serão mostrados somente no final.</p>
+            <span class="large-icon">◎</span><h3>Pronto para começar?</h3><p id="quizStartText">Escolha uma alternativa e avance. Em Banco de Dados, você recebe a explicação logo após responder.</p>
             <p id="quizBankInfo" class="quiz-bank-info hidden"></p>
             <div class="quiz-start-actions"><button id="startQuiz" class="button primary">Simulado com 20 questões</button><button id="startAllQuiz" class="button ghost hidden">Revisar todas as 60 objetivas</button></div>
           </div>
@@ -244,11 +394,195 @@
   <div id="accountPopover" class="account-popover hidden"><strong id="accountName"></strong><span id="accountEmail"></span></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/config.js?v=10"></script>
-  <script src="assets/content.js?v=10"></script>
-  <script src="assets/ethics-content.js?v=10"></script>
-  <script src="assets/database-content.js?v=10"></script>
-  <script src="assets/database-original-questions.js?v=10"></script>
-  <script src="assets/app.js?v=10"></script>
+  <script src="assets/config.js?v=11"></script>
+  <script src="assets/content.js?v=11"></script>
+  <script src="assets/ethics-content.js?v=11"></script>
+  <script src="assets/database-content.js?v=11"></script>
+  <script src="assets/database-original-questions.js?v=11"></script>
+  <script src="assets/app.js?v=11"></script>
+
+  <script>
+  (() => {
+    const quick = [{"q": "Em CLIENTE(id_cliente, nome, telefones), o campo telefones guarda dois números separados por vírgula. O problema é de:", "o": ["1FN", "2FN", "3FN", "Nenhuma"], "a": 0, "e": "A 1FN exige valores atômicos: cada campo deve conter um único valor."}, {"q": "A PK é id_aluno + id_disciplina, mas nome_aluno depende apenas de id_aluno. Isso é:", "o": ["Dependência transitiva", "Dependência parcial", "FK inválida", "Cardinalidade"], "a": 1, "e": "Na 2FN, atributos não-chave devem depender da chave composta inteira. Dependência de apenas uma parte é parcial."}, {"q": "Se id_departamento determina nome_departamento, e ambos ficam na tabela FUNCIONARIO, o problema é de:", "o": ["1FN", "2FN", "3FN", "Nenhuma"], "a": 2, "e": "nome_departamento depende de outro atributo não-chave. Isso caracteriza dependência transitiva, ligada à 3FN."}, {"q": "Um professor pode ensinar várias turmas; cada turma tem um professor. A cardinalidade é:", "o": ["1:1", "1:N", "N:M", "0:N"], "a": 1, "e": "Um professor está relacionado a muitas turmas, enquanto cada turma se relaciona com um professor."}, {"q": "Qual JOIN retorna somente registros que existem nos dois lados?", "o": ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "FULL OUTER JOIN"], "a": 2, "e": "INNER JOIN retorna apenas a interseção entre as tabelas."}];
+    const bank = [{"q": "Em uma tabela ALUNO, o RGM é único para cada aluno. O RGM é:", "o": ["Entidade", "Relacionamento", "Atributo identificador/chave", "Atributo multivalorado"], "a": 2, "e": "O RGM distingue um aluno dos demais. Um atributo que identifica unicamente cada registro funciona como chave."}, {"q": "A combinação id_aluno + id_disciplina identifica uma matrícula. Esse identificador é:", "o": ["Chave simples", "Chave composta", "Chave estrangeira", "Atributo descritivo"], "a": 1, "e": "Quando dois ou mais atributos atuam juntos para identificar um registro, temos uma chave composta."}, {"q": "No modelo PESSOA — adota — PET, a palavra “adota” representa:", "o": ["Entidade", "Atributo", "Relacionamento", "Chave primária"], "a": 2, "e": "Relacionamento é a ligação entre entidades. PESSOA e PET são entidades; 'adota' é a ligação."}, {"q": "Em PET(codigo, nome, adotante), se adotante referencia PESSOA(cpf), adotante é:", "o": ["PRIMARY KEY", "FOREIGN KEY", "Entidade fraca", "Atributo composto"], "a": 1, "e": "Uma FOREIGN KEY aponta para a chave de outra tabela e conecta os registros."}, {"q": "Um professor pode ensinar várias turmas e cada turma possui um único professor. A cardinalidade é:", "o": ["1:1", "1:N", "N:M", "0:0"], "a": 1, "e": "Um professor pode estar ligado a muitas turmas. Isso caracteriza 1:N."}, {"q": "Em um relacionamento N:M entre ALUNO e DISCIPLINA, a solução típica é:", "o": ["Eliminar uma entidade", "Criar tabela associativa com as FKs", "Copiar tudo para ALUNO", "Usar um campo de texto"], "a": 1, "e": "Relacionamentos muitos-para-muitos são resolvidos normalmente por uma tabela associativa com as FKs das duas entidades."}, {"q": "Um campo TELEFONES contém “9999-1111, 9888-2222”. Qual forma normal está sendo violada?", "o": ["1FN", "2FN", "3FN", "Nenhuma"], "a": 0, "e": "A 1FN exige valores atômicos: um valor por campo."}, {"q": "Uma tabela tem PK composta id_aluno + id_disciplina, mas nome_aluno depende apenas de id_aluno. Isso é:", "o": ["Dependência transitiva", "Dependência parcial", "Integridade referencial", "Cardinalidade"], "a": 1, "e": "Na 2FN, atributos não-chave devem depender da chave composta inteira. Dependência de uma parte é parcial."}, {"q": "FUNCIONARIO possui id_funcionario, id_departamento e nome_departamento. Se id_departamento determina nome_departamento, o problema é de:", "o": ["1FN", "2FN", "3FN", "Nenhuma"], "a": 2, "e": "Há dependência transitiva: a chave determina id_departamento, que determina nome_departamento."}, {"q": "Alterar o nome de um professor em dez linhas diferentes para manter os dados iguais é exemplo de:", "o": ["Anomalia de inserção", "Anomalia de atualização", "Anomalia de exclusão", "Chave composta"], "a": 1, "e": "O dado repetido precisa ser atualizado em vários registros, criando risco de inconsistência."}, {"q": "Ao excluir o último empréstimo de um livro, os dados do próprio livro também desaparecem. Isso é:", "o": ["Anomalia de exclusão", "Anomalia de atualização", "Anomalia de inserção", "1FN"], "a": 0, "e": "É uma anomalia de exclusão: apagar um fato provoca a perda indevida de outro."}, {"q": "O principal objetivo da normalização é:", "o": ["Converter para UTF-8", "Reduzir redundâncias e inconsistências", "Gerar um .sql", "Eliminar FKs"], "a": 1, "e": "Normalização reorganiza tabelas para reduzir repetição e evitar anomalias."}, {"q": "Qual JOIN retorna somente registros com correspondência nas duas tabelas?", "o": ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "CROSS JOIN"], "a": 2, "e": "INNER JOIN retorna apenas a interseção."}, {"q": "Qual padrão retorna apenas registros exclusivos da Tabela2?", "o": ["INNER JOIN", "RIGHT JOIN + WHERE Tabela1.id IS NULL", "LEFT JOIN + WHERE Tabela2.id IS NOT NULL", "SELECT da Tabela1"], "a": 1, "e": "RIGHT JOIN preserva todos da direita; filtrar o lado esquerdo como NULL deixa somente os sem correspondência."}, {"q": "No esquema físico de um SGBD, qual item faz sentido?", "o": ["Detalhes de armazenamento e índices", "Visões de usuários", "Somente nomes das entidades", "Regras do usuário final"], "a": 0, "e": "O nível físico trata de como os dados são armazenados e de estruturas como índices."}, {"q": "O nível externo de abstração está mais ligado a:", "o": ["Blocos em disco", "O que cada usuário ou grupo enxerga", "Indexação física", "Tamanho do datafile"], "a": 1, "e": "O nível externo representa as visões disponibilizadas a usuários ou grupos."}, {"q": "Em ORDER BY total DESC, numero_emprestimo ASC, a ordem é:", "o": ["total crescente; número decrescente", "total decrescente; número crescente", "só total decrescente", "só número crescente"], "a": 1, "e": "DESC ordena total do maior para o menor; em empate, ASC ordena o número do menor para o maior."}, {"q": "Por que TIPO_PET deve ficar em tabela própria?", "o": ["Para repetir a descrição", "Para evitar redundância e permitir referência por chave", "Porque toda tabela precisa de dois campos", "Porque PET não pode ter FK"], "a": 1, "e": "Separar TIPO_PET evita repetir a descrição em cada PET; PET guarda somente a FK."}, {"q": "Se Numero é único e identifica cada linha, então funcionalmente:", "o": ["Numero pode determinar os demais atributos da linha", "Numero nunca pode ser chave", "Só texto depende de Numero", "Numero depende de todos os outros"], "a": 0, "e": "Uma chave identifica a linha e determina funcionalmente os atributos daquele registro."}, {"q": "Qual sequência representa entidade, relacionamento, atributo e chave, respectivamente?", "o": ["empregado, alocação, idade, identidade", "idade, empregado, identidade, alocação", "alocação, idade, empregado, identidade", "identidade, idade, alocação, empregado"], "a": 0, "e": "EMPREGADO é entidade; ALOCAÇÃO é relacionamento; IDADE é atributo; IDENTIDADE é chave."}];
+    let dbQuiz = {running:false,index:0,score:0,answered:false};
+
+    function renderQuickPractice() {
+      const host = document.getElementById('dbQuickPractice');
+      if (!host || host.dataset.ready) return;
+      host.dataset.ready = '1';
+      quick.forEach((item, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'db-mini-q';
+        const q = document.createElement('strong');
+        q.textContent = (idx + 1) + '. ' + item.q;
+        wrap.appendChild(q);
+        const opts = document.createElement('div');
+        opts.className = 'db-mini-options';
+        const feedback = document.createElement('div');
+        item.o.forEach((opt, j) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'db-choice';
+          b.textContent = String.fromCharCode(65 + j) + ') ' + opt;
+          b.addEventListener('click', () => {
+            if (wrap.dataset.answered) return;
+            wrap.dataset.answered = '1';
+            [...opts.children].forEach((btn, k) => {
+              btn.disabled = true;
+              if (k === item.a) btn.classList.add('correct');
+              if (k === j && k !== item.a) btn.classList.add('wrong');
+            });
+            const ok = j === item.a;
+            feedback.className = 'db-feedback ' + (ok ? 'ok' : 'bad');
+            feedback.innerHTML = '<b>' + (ok ? '✓ Certo!' : '✗ Errado.') + '</b> ' +
+              'Resposta correta: <b>' + String.fromCharCode(65 + item.a) + ') ' + item.o[item.a] +
+              '</b><br><span>' + item.e + '</span>';
+          });
+          opts.appendChild(b);
+        });
+        wrap.appendChild(opts);
+        wrap.appendChild(feedback);
+        host.appendChild(wrap);
+      });
+    }
+
+    function isBanco() {
+      const s = document.getElementById('subjectSelect');
+      return !!s && s.value === 'banco';
+    }
+
+    function renderDbQuizQuestion() {
+      const form = document.getElementById('quizForm');
+      const actions = document.getElementById('quizActions');
+      const start = document.getElementById('quizStart');
+      const result = document.getElementById('quizResult');
+      const progress = document.getElementById('quizProgress');
+      if (!form || !actions || !start || !result) return;
+      start.classList.add('hidden');
+      form.classList.remove('hidden');
+      actions.classList.remove('hidden');
+      result.classList.add('hidden');
+      const prev = document.getElementById('quizPrev');
+      const next = document.getElementById('quizNext');
+      if (prev) prev.classList.add('hidden');
+      if (next) {
+        next.disabled = true;
+        next.textContent = dbQuiz.index === bank.length - 1 ? 'Ver resultado' : 'Próxima questão →';
+      }
+      if (progress) progress.textContent = (dbQuiz.index + 1) + '/' + bank.length;
+
+      const item = bank[dbQuiz.index];
+      form.innerHTML = '';
+      const card = document.createElement('div');
+      card.className = 'db-quiz-card';
+      const title = document.createElement('h3');
+      title.textContent = (dbQuiz.index + 1) + '. ' + item.q;
+      card.appendChild(title);
+      const opts = document.createElement('div');
+      opts.className = 'db-quiz-options';
+      const feedback = document.createElement('div');
+
+      item.o.forEach((opt, j) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'db-choice';
+        b.textContent = String.fromCharCode(65 + j) + ') ' + opt;
+        b.addEventListener('click', () => {
+          if (dbQuiz.answered) return;
+          dbQuiz.answered = true;
+          const ok = j === item.a;
+          if (ok) dbQuiz.score++;
+          [...opts.children].forEach((btn, k) => {
+            btn.disabled = true;
+            if (k === item.a) btn.classList.add('correct');
+            if (k === j && k !== item.a) btn.classList.add('wrong');
+          });
+          feedback.className = 'db-quiz-explanation ' + (ok ? 'ok' : 'bad');
+          feedback.innerHTML =
+            '<b>' + (ok ? '✓ Você acertou!' : '✗ Você errou.') + '</b><br>' +
+            'Resposta correta: <b>' + String.fromCharCode(65 + item.a) + ') ' + item.o[item.a] + '</b><br><br>' +
+            '<b>Explicação:</b> ' + item.e;
+          if (next) next.disabled = false;
+        });
+        opts.appendChild(b);
+      });
+
+      card.appendChild(opts);
+      card.appendChild(feedback);
+      form.appendChild(card);
+    }
+
+    function startDbQuiz() {
+      dbQuiz = {running:true,index:0,score:0,answered:false};
+      renderDbQuizQuestion();
+    }
+
+    function finishDbQuiz() {
+      const form = document.getElementById('quizForm');
+      const actions = document.getElementById('quizActions');
+      const result = document.getElementById('quizResult');
+      const progress = document.getElementById('quizProgress');
+      const pct = Math.round(dbQuiz.score / bank.length * 100);
+      if (form) form.classList.add('hidden');
+      if (actions) actions.classList.add('hidden');
+      if (result) {
+        result.classList.remove('hidden');
+        result.innerHTML =
+          '<div class="panel"><p class="eyebrow blue">Resultado</p><h3>' +
+          dbQuiz.score + '/' + bank.length + ' — ' + pct + '%</h3>' +
+          '<p>Refaça o simulado até conseguir explicar por que cada alternativa está certa ou errada.</p>' +
+          '<button type="button" class="button primary" id="dbQuizRestart">Refazer simulado</button></div>';
+        const r = document.getElementById('dbQuizRestart');
+        if (r) r.addEventListener('click', startDbQuiz);
+      }
+      if (progress) progress.textContent = bank.length + '/' + bank.length;
+      dbQuiz.running = false;
+    }
+
+    document.addEventListener('click', (ev) => {
+      const target = ev.target.closest('#startQuiz,#startAllQuiz');
+      if (!target || !isBanco()) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      startDbQuiz();
+    }, true);
+
+    document.addEventListener('click', (ev) => {
+      if (!dbQuiz.running || !isBanco()) return;
+      if (ev.target.closest('#quizNext')) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        if (!dbQuiz.answered) return;
+        if (dbQuiz.index < bank.length - 1) {
+          dbQuiz.index++;
+          dbQuiz.answered = false;
+          renderDbQuizQuestion();
+        } else {
+          finishDbQuiz();
+        }
+      }
+      if (ev.target.closest('#quizPrev')) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      }
+    }, true);
+
+    const subject = document.getElementById('subjectSelect');
+    if (subject) subject.addEventListener('change', () => {
+      dbQuiz.running = false;
+      const start = document.getElementById('quizStart');
+      const form = document.getElementById('quizForm');
+      const actions = document.getElementById('quizActions');
+      const result = document.getElementById('quizResult');
+      if (start) start.classList.remove('hidden');
+      if (form) form.classList.add('hidden');
+      if (actions) actions.classList.add('hidden');
+      if (result) result.classList.add('hidden');
+    });
+
+    renderQuickPractice();
+  })();
+  </script>
 </body>
 </html>
